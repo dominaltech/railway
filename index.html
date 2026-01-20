@@ -696,7 +696,7 @@
     <!-- Welcome Section -->
     <section class="welcome-section animate-in">
         <h1 class="welcome-title" data-en="Welcome to Indian Railways Question Bank" data-hi="भारतीय रेलवे प्रश्न बैंक में आपका स्वागत है">
-            Welcome to RailBook: <br> Indian Railways Question Bank for Exams
+            Welcome to Indian Railways Question Bank
         </h1>
         <p class="welcome-subtitle" data-en="Access comprehensive question papers for various Railway examinations. Our platform provides organized study materials to help you prepare effectively. Install our app for offline access and enhanced learning experience on Mobile, Desktop, and iOS devices." data-hi="विभिन्न रेलवे परीक्षाओं के लिए व्यापक प्रश्न पत्र प्राप्त करें। हमारा प्लेटफॉर्म आपको प्रभावी ढंग से तैयारी करने में मदद करने के लिए व्यवस्थित अध्ययन सामग्री प्रदान करता है। ऑफलाइन पहुंच और बेहतर सीखने के अनुभव के लिए मोबाइल, डेस्कटॉप और iOS उपकरणों पर हमारा ऐप इंस्टॉल करें।">
             Access comprehensive question papers for various Railway examinations. Our platform provides organized study materials to help you prepare effectively. Install our app for offline access and enhanced learning experience on Mobile, Desktop, and iOS devices.
@@ -840,380 +840,461 @@
         </div>
     </div>
 
-    <script>
+   <script>
+    // Language Toggle System - Can be easily removed
+    const LANGUAGE_CONFIG = {
+        enabled: true, // Set to false to disable language switching
+        defaultLanguage: 'en'
+    };
 
-        // Add this at the top of your script
-const cacheBuster = new Date().getTime();
+    let currentLanguage = LANGUAGE_CONFIG.defaultLanguage;
 
-        // Language Toggle System - Can be easily removed
-        const LANGUAGE_CONFIG = {
-            enabled: true, // Set to false to disable language switching
-            defaultLanguage: 'en'
-        };
-
-        let currentLanguage = LANGUAGE_CONFIG.defaultLanguage;
-
-        function toggleLanguage(lang) {
-            if (!LANGUAGE_CONFIG.enabled) return;
-            
-            currentLanguage = lang;
-            localStorage.setItem('preferredLanguage', lang);
-            
-            // Update UI
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
-            
-            // Update all translatable elements
-            document.querySelectorAll('[data-en]').forEach(element => {
-                const text = element.getAttribute(`data-${lang}`);
-                if (text) {
-                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                        element.placeholder = text;
-                    } else {
-                        element.textContent = text;
-                    }
-                }
-            });
-        }
-
-        // Initialize language
-        if (LANGUAGE_CONFIG.enabled) {
-            const savedLanguage = localStorage.getItem('preferredLanguage') || LANGUAGE_CONFIG.defaultLanguage;
-            toggleLanguage(savedLanguage);
-            
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', () => toggleLanguage(btn.dataset.lang));
-            });
-        }
-
-        // PWA Installation
-        let deferredPrompt;
-        let installNotificationCount = 0;
-        const MAX_NOTIFICATIONS_PER_DAY = 2;
-
-        // Check if app is installed
-        // Check if app is installed - improved detection
-function isAppInstalled() {
-    // Check if running in standalone mode (app is open)
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                        window.navigator.standalone === true;
-    
-    // If not in standalone, app is NOT currently installed
-    if (!isStandalone) {
-        // Clear the installation flag if it exists
-        if (localStorage.getItem('appInstalled') === 'true') {
-            console.log('App was uninstalled, resetting flags');
-            localStorage.removeItem('appInstalled');
-            localStorage.removeItem('installNotifications');
-        }
-        return false;
-    }
-    
-    return true;
-}
-
-
-        // Get notification data from localStorage
-        function getNotificationData() {
-            const data = localStorage.getItem('installNotifications');
-            if (!data) return { date: new Date().toDateString(), count: 0, dismissed: [] };
-            
-            const parsed = JSON.parse(data);
-            if (parsed.date !== new Date().toDateString()) {
-                return { date: new Date().toDateString(), count: 0, dismissed: [] };
-            }
-            return parsed;
-        }
-
-        // Save notification data
-        function saveNotificationData(data) {
-            localStorage.setItem('installNotifications', JSON.stringify(data));
-        }
-
-        // Check if we should show notification
-        function shouldShowNotification() {
-            if (isAppInstalled()) return false;
-            
-            const data = getNotificationData();
-            const currentHour = new Date().getHours();
-            const period = currentHour < 16 ? 'morning' : 'evening';
-            
-            if (data.count >= MAX_NOTIFICATIONS_PER_DAY) return false;
-            if (data.dismissed.includes(period)) return false;
-            
-            return true;
-        }
-
-        // Show install prompt notification
-        function showInstallPrompt() {
-            if (!shouldShowNotification()) return;
-            
-            setTimeout(() => {
-                const prompt = document.getElementById('installPrompt');
-                if (prompt && deferredPrompt) {
-                    prompt.classList.add('show');
-                    
-                    const data = getNotificationData();
-                    data.count++;
-                    saveNotificationData(data);
-                }
-            }, 3000);
-        }
-
-        // PWA Install Event
-      // PWA Install Event - fires when app is installable
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    console.log('beforeinstallprompt fired - app is not installed');
-    
-    // Clear any old installation flags
-    localStorage.removeItem('appInstalled');
-    localStorage.removeItem('installNotifications');
-    
-    // Show install button
-    const installBtn = document.getElementById('installButton');
-    installBtn.classList.remove('hidden');
-    
-    // Show notification prompt
-    showInstallPrompt();
-});
-
-// Listen for app installation
-window.addEventListener('appinstalled', (e) => {
-    console.log('App installed successfully');
-    localStorage.setItem('appInstalled', 'true');
-    
-    // Hide install button
-    const installBtn = document.getElementById('installButton');
-    installBtn.classList.add('hidden');
-    
-    // Hide install prompt
-    document.getElementById('installPrompt').classList.remove('show');
-    
-    deferredPrompt = null;
-});
-
-
-       // Install button click
-document.getElementById('installButton')?.addEventListener('click', async () => {
-    if (!deferredPrompt) {
-        console.log('Install prompt not available');
-        return;
-    }
-    
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    console.log('User choice:', outcome);
-    
-    if (outcome === 'accepted') {
-        localStorage.setItem('appInstalled', 'true');
-        document.getElementById('installButton').classList.add('hidden');
-        document.getElementById('installPrompt').classList.remove('show');
-    }
-    
-    deferredPrompt = null;
-});
-
-
-        // Prompt install button
-        document.getElementById('promptInstall')?.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                localStorage.setItem('appInstalled', 'true');
-                document.getElementById('installButton').classList.add('hidden');
-            }
-            
-            document.getElementById('installPrompt').classList.remove('show');
-            deferredPrompt = null;
-        });
-
-        // Prompt later button
-        document.getElementById('promptLater')?.addEventListener('click', () => {
-            const data = getNotificationData();
-            const currentHour = new Date().getHours();
-            const period = currentHour < 16 ? 'morning' : 'evening';
-            
-            if (!data.dismissed.includes(period)) {
-                data.dismissed.push(period);
-            }
-            saveNotificationData(data);
-            
-            document.getElementById('installPrompt').classList.remove('show');
-        });
-
-        // Close prompt
-        document.getElementById('closePrompt')?.addEventListener('click', () => {
-            const data = getNotificationData();
-            const currentHour = new Date().getHours();
-            const period = currentHour < 16 ? 'morning' : 'evening';
-            
-            if (!data.dismissed.includes(period)) {
-                data.dismissed.push(period);
-            }
-            saveNotificationData(data);
-            
-            document.getElementById('installPrompt').classList.remove('show');
-        });
-
-        // Check if app was uninstalled
-        // Check if app was uninstalled - runs every 3 seconds
-setInterval(() => {
-    const wasInstalled = localStorage.getItem('appInstalled') === 'true';
-    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
-                                 window.navigator.standalone === true;
-    
-    // If was installed but no longer in standalone mode, user deleted the app
-    if (wasInstalled && !isCurrentlyInstalled) {
-        console.log('App was uninstalled - resetting installation state');
+    function toggleLanguage(lang) {
+        if (!LANGUAGE_CONFIG.enabled) return;
         
-        // Clear all installation-related data
+        currentLanguage = lang;
+        localStorage.setItem('preferredLanguage', lang);
+        
+        // Update UI
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        
+        // Update all translatable elements
+        document.querySelectorAll('[data-en]').forEach(element => {
+            const text = element.getAttribute(`data-${lang}`);
+            if (text) {
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                    element.placeholder = text;
+                } else {
+                    element.textContent = text;
+                }
+            }
+        });
+    }
+
+    // Initialize language
+    if (LANGUAGE_CONFIG.enabled) {
+        const savedLanguage = localStorage.getItem('preferredLanguage') || LANGUAGE_CONFIG.defaultLanguage;
+        toggleLanguage(savedLanguage);
+        
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => toggleLanguage(btn.dataset.lang));
+        });
+    }
+
+    // PWA Installation
+    let deferredPrompt;
+    let installNotificationCount = 0;
+    const MAX_NOTIFICATIONS_PER_DAY = 2;
+
+    // Check if app is installed - improved detection
+    function isAppInstalled() {
+        // Check if running in standalone mode (app is open)
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                            window.navigator.standalone === true;
+        
+        // If not in standalone, app is NOT currently installed
+        if (!isStandalone) {
+            // Clear the installation flag if it exists
+            if (localStorage.getItem('appInstalled') === 'true') {
+                console.log('App was uninstalled, resetting flags');
+                localStorage.removeItem('appInstalled');
+                localStorage.removeItem('installNotifications');
+            }
+            return false;
+        }
+        
+        return true;
+    }
+
+    // Get notification data from localStorage
+    function getNotificationData() {
+        const data = localStorage.getItem('installNotifications');
+        if (!data) return { date: new Date().toDateString(), count: 0, dismissed: [] };
+        
+        const parsed = JSON.parse(data);
+        if (parsed.date !== new Date().toDateString()) {
+            return { date: new Date().toDateString(), count: 0, dismissed: [] };
+        }
+        return parsed;
+    }
+
+    // Save notification data
+    function saveNotificationData(data) {
+        localStorage.setItem('installNotifications', JSON.stringify(data));
+    }
+
+    // Check if we should show notification
+    function shouldShowNotification() {
+        if (isAppInstalled()) return false;
+        
+        const data = getNotificationData();
+        const currentHour = new Date().getHours();
+        const period = currentHour < 16 ? 'morning' : 'evening';
+        
+        if (data.count >= MAX_NOTIFICATIONS_PER_DAY) return false;
+        if (data.dismissed.includes(period)) return false;
+        
+        return true;
+    }
+
+    // Show install prompt notification
+    function showInstallPrompt() {
+        if (!shouldShowNotification()) return;
+        
+        setTimeout(() => {
+            const prompt = document.getElementById('installPrompt');
+            if (prompt && deferredPrompt) {
+                prompt.classList.add('show');
+                
+                const data = getNotificationData();
+                data.count++;
+                saveNotificationData(data);
+            }
+        }, 3000);
+    }
+
+    // PWA Install Event - fires when app is installable
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        console.log('beforeinstallprompt fired - app is not installed');
+        
+        // Clear any old installation flags
         localStorage.removeItem('appInstalled');
-        localStorage.removeItem('installNotifications');
         
-        // Reload to trigger beforeinstallprompt again
-        location.reload();
-    }
-    
-    // If not installed and beforeinstallprompt hasn't fired yet
-    if (!wasInstalled && !isCurrentlyInstalled && !deferredPrompt) {
-        // Check if install button should be visible
+        // Show install button
         const installBtn = document.getElementById('installButton');
-        if (installBtn && !installBtn.classList.contains('hidden')) {
-            // BeforeInstallPrompt should fire, keep button visible
-            console.log('Waiting for beforeinstallprompt event...');
+        if (installBtn) {
+            installBtn.classList.remove('hidden');
         }
-    }
-}, 3000);
-// Detect when page becomes visible (user returns from uninstalling)
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-        console.log('Page visible - checking installation status');
         
+        // Show notification prompt
+        showInstallPrompt();
+    });
+
+    // Listen for app installation
+    window.addEventListener('appinstalled', (e) => {
+        console.log('App installed successfully');
+        localStorage.setItem('appInstalled', 'true');
+        
+        // Hide install button
+        const installBtn = document.getElementById('installButton');
+        if (installBtn) {
+            installBtn.classList.add('hidden');
+        }
+        
+        // Hide install prompt
+        const installPrompt = document.getElementById('installPrompt');
+        if (installPrompt) {
+            installPrompt.classList.remove('show');
+        }
+        
+        deferredPrompt = null;
+    });
+
+    // Install button click
+    document.getElementById('installButton')?.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+            console.log('Install prompt not available');
+            return;
+        }
+        
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        console.log('User choice:', outcome);
+        
+        if (outcome === 'accepted') {
+            localStorage.setItem('appInstalled', 'true');
+            document.getElementById('installButton').classList.add('hidden');
+            document.getElementById('installPrompt').classList.remove('show');
+        }
+        
+        deferredPrompt = null;
+    });
+
+    // Prompt install button
+    document.getElementById('promptInstall')?.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+            console.log('Install prompt not available');
+            return;
+        }
+        
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        
+        console.log('User choice:', outcome);
+        
+        if (outcome === 'accepted') {
+            localStorage.setItem('appInstalled', 'true');
+            document.getElementById('installButton').classList.add('hidden');
+        }
+        
+        document.getElementById('installPrompt').classList.remove('show');
+        deferredPrompt = null;
+    });
+
+    // Prompt later button
+    document.getElementById('promptLater')?.addEventListener('click', () => {
+        const data = getNotificationData();
+        const currentHour = new Date().getHours();
+        const period = currentHour < 16 ? 'morning' : 'evening';
+        
+        if (!data.dismissed.includes(period)) {
+            data.dismissed.push(period);
+        }
+        saveNotificationData(data);
+        
+        document.getElementById('installPrompt').classList.remove('show');
+    });
+
+    // Close prompt
+    document.getElementById('closePrompt')?.addEventListener('click', () => {
+        const data = getNotificationData();
+        const currentHour = new Date().getHours();
+        const period = currentHour < 16 ? 'morning' : 'evening';
+        
+        if (!data.dismissed.includes(period)) {
+            data.dismissed.push(period);
+        }
+        saveNotificationData(data);
+        
+        document.getElementById('installPrompt').classList.remove('show');
+    });
+
+    // Check if app was uninstalled - runs every 3 seconds
+    setInterval(() => {
         const wasInstalled = localStorage.getItem('appInstalled') === 'true';
         const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
                                      window.navigator.standalone === true;
         
-        // If was installed but not in standalone mode anymore
+        // If was installed but no longer in standalone mode, user deleted the app
         if (wasInstalled && !isCurrentlyInstalled) {
-            console.log('App uninstalled detected on page focus');
+            console.log('App was uninstalled - resetting installation state');
+            
+            // Clear all installation-related data
             localStorage.removeItem('appInstalled');
             localStorage.removeItem('installNotifications');
+            
+            // Reload to trigger beforeinstallprompt again
             location.reload();
         }
-    }
-});
-
-// Also check on page load
-window.addEventListener('load', () => {
-    const wasInstalled = localStorage.getItem('appInstalled') === 'true';
-    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
-                                 window.navigator.standalone === true;
-    
-    if (wasInstalled && !isCurrentlyInstalled) {
-        console.log('App uninstalled - clearing data on page load');
-        localStorage.removeItem('appInstalled');
-        localStorage.removeItem('installNotifications');
         
-        // Reset notification data to allow prompts again
-        const data = { date: new Date().toDateString(), count: 0, dismissed: [] };
-        localStorage.setItem('installNotifications', JSON.stringify(data));
-    }
-});
-
-
-        // Sidebar Menu
-        const menuIcon = document.getElementById('menuIcon');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const closeMenu = document.getElementById('closeMenu');
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+        // If not installed and install button exists, make sure it's visible if prompt available
+        if (!wasInstalled && !isCurrentlyInstalled && deferredPrompt) {
+            const installBtn = document.getElementById('installButton');
+            if (installBtn && installBtn.classList.contains('hidden')) {
+                installBtn.classList.remove('hidden');
+            }
         }
+    }, 3000);
 
-        menuIcon?.addEventListener('click', toggleSidebar);
-        closeMenu?.addEventListener('click', toggleSidebar);
-        overlay?.addEventListener('click', toggleSidebar);
-
-        // Share functionality
-        document.getElementById('shareApp')?.addEventListener('click', async (e) => {
-            e.preventDefault();
+    // Detect when page becomes visible (user returns from uninstalling)
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            console.log('Page visible - checking installation status');
             
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: 'Indian Railways Question Bank',
-                        text: 'Access comprehensive question papers for Railway exams',
-                        url: window.location.href
+            const wasInstalled = localStorage.getItem('appInstalled') === 'true';
+            const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                                         window.navigator.standalone === true;
+            
+            // If was installed but not in standalone mode anymore
+            if (wasInstalled && !isCurrentlyInstalled) {
+                console.log('App uninstalled detected on page focus');
+                localStorage.removeItem('appInstalled');
+                localStorage.removeItem('installNotifications');
+                location.reload();
+            }
+        }
+    });
+
+    // Also check on page load
+    window.addEventListener('load', () => {
+        const wasInstalled = localStorage.getItem('appInstalled') === 'true';
+        const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                                     window.navigator.standalone === true;
+        
+        if (wasInstalled && !isCurrentlyInstalled) {
+            console.log('App uninstalled - clearing data on page load');
+            localStorage.removeItem('appInstalled');
+            localStorage.removeItem('installNotifications');
+            
+            // Reset notification data to allow prompts again
+            const data = { date: new Date().toDateString(), count: 0, dismissed: [] };
+            localStorage.setItem('installNotifications', JSON.stringify(data));
+        }
+    });
+
+    // Sidebar Menu
+    const menuIcon = document.getElementById('menuIcon');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const closeMenu = document.getElementById('closeMenu');
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    menuIcon?.addEventListener('click', toggleSidebar);
+    closeMenu?.addEventListener('click', toggleSidebar);
+    overlay?.addEventListener('click', toggleSidebar);
+
+    // Share functionality
+    document.getElementById('shareApp')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Indian Railways Question Bank',
+                    text: 'Access comprehensive question papers for Railway exams',
+                    url: window.location.href
+                });
+            } catch (err) {
+                console.log('Share cancelled');
+            }
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(window.location.href);
+            alert('Link copied to clipboard!');
+        }
+    });
+
+    // Service Worker Registration with aggressive update strategy
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+            .then(registration => {
+                console.log('SW registered:', registration);
+                
+                // Force immediate update check
+                registration.update();
+                
+                // Check for updates aggressively - every 10 seconds
+                setInterval(() => {
+                    console.log('Forcing update check...');
+                    registration.update();
+                }, 10000);
+                
+                // Listen for updates
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('New service worker found, installing...');
+                    
+                    newWorker.addEventListener('statechange', () => {
+                        console.log('SW state changed:', newWorker.state);
+                        
+                        if (newWorker.state === 'installed') {
+                            if (navigator.serviceWorker.controller) {
+                                // New version available
+                                console.log('New version available!');
+                                
+                                // Tell the new SW to skip waiting
+                                newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                
+                                // Reload immediately to get fresh content
+                                setTimeout(() => {
+                                    console.log('Reloading to apply updates...');
+                                    window.location.reload();
+                                }, 1000);
+                            } else {
+                                // First install
+                                console.log('Service worker installed for the first time');
+                            }
+                        }
+                        
+                        if (newWorker.state === 'activated') {
+                            console.log('Service worker activated');
+                        }
                     });
-                } catch (err) {
-                    console.log('Share cancelled');
-                }
-            } else {
-                // Fallback: copy to clipboard
-                navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard!');
+                });
+            })
+            .catch(error => {
+                console.error('SW registration failed:', error);
+            });
+        
+        // Reload when new service worker takes control
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshing) return;
+            console.log('Controller changed, reloading page...');
+            refreshing = true;
+            window.location.reload();
+        });
+        
+        // Listen for messages from service worker
+        navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'RELOAD_PAGE') {
+                console.log('SW requested page reload');
+                window.location.reload();
             }
         });
+    }
 
-       
-
-        // Animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+    // Force cache refresh on page load
+    window.addEventListener('load', () => {
+        // Clear any stale caches on load
+        if ('caches' in window) {
+            caches.keys().then(cacheNames => {
+                console.log('Found caches:', cacheNames);
             });
-        }, observerOptions);
+        }
+    });
 
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
+    // Animation on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
         });
+    }, observerOptions);
 
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
 
-        // Auto-update detection for new versions
-    if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
-        .then(registration => {
-            // Check for updates immediately and every 30 seconds
-            registration.update();
-            setInterval(() => registration.update(), 30000);
+    // IndexedDB for storing bookmarks (persistent user data)
+    const DB_NAME = 'IndianRailwayQB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'bookmarks';
+
+    function initDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
             
-            // Auto-reload when update is found
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                newWorker.addEventListener('statechange', () => {
-                    if (newWorker.state === 'activated') {
-                        // Force reload without asking
-                        window.location.reload();
-                    }
-                });
-            });
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve(request.result);
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                }
+            };
         });
-}
-       
-        
-       
-    
-    </script>
+    }
+
+    // Request persistent storage (prevents auto-deletion)
+    if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().then(persistent => {
+            if (persistent) {
+                console.log('Bookmarks storage is persistent');
+            }
+        });
+    }
+</script>
 </body>
 </html>
