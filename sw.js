@@ -1,5 +1,5 @@
-// Auto-versioning based on timestamp
-const CACHE_VERSION = new Date().getTime();
+// Auto-versioning based on current date/time - updates automatically
+const CACHE_VERSION = new Date().toISOString().split('T')[0]; // Changes daily
 const CACHE_NAME = `indian-railways-qb-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `indian-railways-runtime-${CACHE_VERSION}`;
 
@@ -18,16 +18,20 @@ const STATIC_CACHE_URLS = [
 
 // Install event - cache static resources
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installing...');
+  console.log('Service Worker: Installing with version', CACHE_VERSION);
   
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Service Worker: Caching static files');
-        return cache.addAll(STATIC_CACHE_URLS);
+        return cache.addAll(STATIC_CACHE_URLS).catch(err => {
+          console.error('Failed to cache some files:', err);
+          // Continue even if some files fail
+          return Promise.resolve();
+        });
       })
       .then(() => {
-        console.log('Service Worker: Installation complete');
+        console.log('Service Worker: Installation complete, skipping waiting');
         return self.skipWaiting();
       })
       .catch((error) => {
@@ -36,14 +40,16 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate event - clear ALL old caches for fresh updates
+// Activate event - clean up ALL old caches aggressively
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activating...');
+  console.log('Service Worker: Activating with version', CACHE_VERSION);
   
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
-        // Delete ALL old caches to force fresh content
+        console.log('Found caches:', cacheNames);
+        
+        // Delete ALL caches except current ones
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
@@ -54,28 +60,46 @@ self.addEventListener('activate', (event) => {
         );
       })
       .then(() => {
-        console.log('Service Worker: Activated with fresh cache');
+        console.log('Service Worker: All old caches cleared');
         return self.clients.claim();
+      })
+      .then(() => {
+        // Notify all clients that SW is activated
+        return self.clients.matchAll().then(clients => {
+          clients.forEach(client => {
+            client.postMessage({
+              type: 'SW_ACTIVATED',
+              version: CACHE_VERSION
+            });
+          });
+        });
       })
   );
 });
 
-// Fetch event - NETWORK FIRST strategy for HTML, cache for assets
+// Fetch event - NETWORK FIRST for HTML, cache for assets
 self.addEventListener('fetch', (event) => {
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
-  // Handle navigation requests - NETWORK FIRST
+  // Skip chrome-extension and other non-http(s) requests
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
+  // Handle navigation requests - NETWORK FIRST (always fresh)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: 'no-store' })
         .then((response) => {
           // Don't cache if not successful
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
+
+          console.log('Fetched fresh navigation:', event.request.url);
 
           // Cache the new version
           const responseToCache = response.clone();
@@ -86,7 +110,8 @@ self.addEventListener('fetch', (event) => {
 
           return response;
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('Network failed, falling back to cache:', error);
           // Fallback to cache if offline
           return caches.match(event.request)
             .then((cachedResponse) => {
@@ -97,44 +122,27 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle other requests (images, scripts, styles) - CACHE FIRST
+  // Handle other requests - NETWORK FIRST with cache fallback
   event.respondWith(
-    caches.match(event.request)
-      .then((cachedResponse) => {
-        if (cachedResponse) {
-          // Return cached version but update in background
-          fetch(event.request)
-            .then((response) => {
-              if (response && response.status === 200) {
-                caches.open(RUNTIME_CACHE)
-                  .then((cache) => {
-                    cache.put(event.request, response);
-                  });
-              }
-            })
-            .catch(() => {});
-          
-          return cachedResponse;
+    fetch(event.request, { cache: 'reload' })
+      .then((response) => {
+        // Don't cache if not successful
+        if (!response || response.status !== 200) {
+          return response;
         }
 
-        // Not in cache, fetch from network
-        return fetch(event.request)
-          .then((response) => {
-            // Don't cache if not successful
-            if (!response || response.status !== 200) {
-              return response;
-            }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            caches.open(RUNTIME_CACHE)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
+        // Clone and cache the response
+        const responseToCache = response.clone();
+        caches.open(RUNTIME_CACHE)
+          .then((cache) => {
+            cache.put(event.request, responseToCache);
           });
+
+        return response;
+      })
+      .catch(() => {
+        // Fallback to cache if network fails
+        return caches.match(event.request);
       })
   );
 });
@@ -152,7 +160,6 @@ self.addEventListener('sync', (event) => {
 async function syncQuestionPapers() {
   try {
     console.log('Syncing question papers...');
-    // Implement your sync logic here
     return Promise.resolve();
   } catch (error) {
     console.error('Sync failed:', error);
@@ -212,18 +219,15 @@ self.addEventListener('notificationclick', (event) => {
   } else if (event.action === 'dismiss') {
     return;
   } else {
-    // Default action - open the app
     event.waitUntil(
       clients.matchAll({ type: 'window', includeUncontrolled: true })
         .then((clientList) => {
-          // Check if app is already open
           for (let i = 0; i < clientList.length; i++) {
             const client = clientList[i];
             if (client.url === '/' && 'focus' in client) {
               return client.focus();
             }
           }
-          // Open new window if not open
           if (clients.openWindow) {
             return clients.openWindow('/');
           }
@@ -237,6 +241,7 @@ self.addEventListener('message', (event) => {
   console.log('Service Worker: Message received', event.data);
   
   if (event.data && event.data.type === 'SKIP_WAITING') {
+    console.log('Skipping waiting as requested');
     self.skipWaiting();
   }
   
@@ -258,7 +263,13 @@ self.addEventListener('message', (event) => {
           );
         })
         .then(() => {
-          console.log('All caches cleared');
+          console.log('All caches cleared by request');
+          return self.clients.matchAll();
+        })
+        .then((clients) => {
+          clients.forEach(client => {
+            client.postMessage({ type: 'CACHES_CLEARED' });
+          });
         })
     );
   }
@@ -267,13 +278,13 @@ self.addEventListener('message', (event) => {
     event.waitUntil(
       self.registration.update()
         .then(() => {
-          console.log('Update check completed');
+          console.log('Manual update check completed');
         })
     );
   }
 });
 
-// Periodic background sync for scheduled notifications
+// Periodic background sync
 self.addEventListener('periodicsync', (event) => {
   console.log('Service Worker: Periodic sync triggered', event.tag);
   
@@ -286,7 +297,6 @@ self.addEventListener('periodicsync', (event) => {
 async function checkForUpdates() {
   try {
     console.log('Checking for updates...');
-    // Force update check
     await self.registration.update();
     return Promise.resolve();
   } catch (error) {
@@ -297,31 +307,21 @@ async function checkForUpdates() {
 
 // Cache size management
 async function manageCacheSize(cacheName, maxItems) {
-  const cache = await caches.open(cacheName);
-  const keys = await cache.keys();
-  
-  if (keys.length > maxItems) {
-    await cache.delete(keys[0]);
-    manageCacheSize(cacheName, maxItems);
+  try {
+    const cache = await caches.open(cacheName);
+    const keys = await cache.keys();
+    
+    if (keys.length > maxItems) {
+      console.log(`Cache ${cacheName} exceeded ${maxItems} items, cleaning up...`);
+      await cache.delete(keys[0]);
+      await manageCacheSize(cacheName, maxItems);
+    }
+  } catch (error) {
+    console.error('Cache management error:', error);
   }
 }
 
-// Limit runtime cache size - check every 5 minutes
+// Limit runtime cache size - check every minute
 setInterval(() => {
   manageCacheSize(RUNTIME_CACHE, 100);
-}, 300000);
-
-// Force update check on service worker activation
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    self.clients.matchAll()
-      .then((clients) => {
-        clients.forEach((client) => {
-          client.postMessage({
-            type: 'SW_ACTIVATED',
-            message: 'Service Worker updated and activated'
-          });
-        });
-      })
-  );
-});
+}, 60000);
