@@ -1,109 +1,118 @@
 {
-  "name": "Indian Railways Question Bank",
-  "short_name": "Railway QB",
-  "description": "Official Indian Railways Question Bank - Access comprehensive question papers for various Railway examinations on Mobile, Desktop, and iOS devices",
-  "start_url": "/index.html",
-  "display": "standalone",
-  
-  "background_color": "#FFFFFF",
-  "theme_color": "#9370DB",
-  "orientation": "any",
-  "scope": "/",
-  "lang": "en-IN",
-  "dir": "ltr",
-  "categories": ["education", "productivity"],
-  "icons": [
-    {
-      "src": "railway.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "railway.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "railway.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "railway.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "railway.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "railway.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "railway.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "railway.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshots/desktop-screenshot.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshots/mobile-screenshot.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Download PDFs",
-      "short_name": "PDFs",
-      "description": "Access question paper PDFs",
-      "url": "/pdfs.html",
-      "icons": [
+ 
+    "name": "RailBook - Indian Railway Question Bank",
+    "short_name": "RailBook",
+    "description": "Official Indian Railway Question Papers and Exam Resources Platform",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#003366",
+    "orientation": "any",
+    "scope": "/",
+    "icons": [
         {
-          "src": "/icons/pdf-icon-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "About Us",
-      "short_name": "About",
-      "description": "Learn more about the platform",
-      "url": "/about.html",
-      "icons": [
+            "src": "railway.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
         {
-          "src": "/icons/info-icon-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
+            "src": "railway.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "railway.png",
+            "sizes": "128x128",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "railway.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "railway.png",
+            "sizes": "152x152",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "railway.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "railway.png",
+            "sizes": "384x384",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "railway.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
         }
-      ]
+    ],
+    "categories": ["education", "reference", "productivity"],
+    "lang": "en-IN",
+    "dir": "ltr",
+    "prefer_related_applications": false,
+    "screenshots": [
+        {
+            "src": "railway.png",
+            "sizes": "540x720",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "railway.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Download PDFs",
+            "short_name": "PDFs",
+            "description": "Access Railway exam question papers",
+            "url": "/pdfs.html",
+            "icons": [
+                {
+                    "src": "railway.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "About Us",
+            "short_name": "About",
+            "description": "Learn more about RailBook",
+            "url": "/about.html",
+            "icons": [
+                {
+                    "src": "railway.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        }
+    ],
+    "share_target": {
+        "action": "/share",
+        "method": "GET",
+        "enctype": "application/x-www-form-urlencoded",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
     }
-  ],
-  "prefer_related_applications": false
-  "display_override": ["window-controls-overlay", "standalone", "fullscreen"]
 }
