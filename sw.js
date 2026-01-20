@@ -1,5 +1,7 @@
-const CACHE_NAME = 'indian-railways-qb-v1.0.0';
-const RUNTIME_CACHE = 'indian-railways-runtime-v1.0.0';
+const CACHE_VERSION = new Date().getTime(); // Auto-generates version from timestamp
+const CACHE_NAME = `indian-railways-qb-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `indian-railways-runtime-${CACHE_VERSION}`;
+
 
 // Files to cache on installation
 const STATIC_CACHE_URLS = [
@@ -8,9 +10,7 @@ const STATIC_CACHE_URLS = [
   '/pdfs.html',
   '/about.html',
   '/manifest.json',
-  '/favicon.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/favicon.png'
 ];
 
 // Install event - cache static resources
