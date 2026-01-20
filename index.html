@@ -893,11 +893,26 @@ const cacheBuster = new Date().getTime();
         const MAX_NOTIFICATIONS_PER_DAY = 2;
 
         // Check if app is installed
-        function isAppInstalled() {
-            return window.matchMedia('(display-mode: standalone)').matches ||
-                   window.navigator.standalone === true ||
-                   localStorage.getItem('appInstalled') === 'true';
+        // Check if app is installed - improved detection
+function isAppInstalled() {
+    // Check if running in standalone mode (app is open)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                        window.navigator.standalone === true;
+    
+    // If not in standalone, app is NOT currently installed
+    if (!isStandalone) {
+        // Clear the installation flag if it exists
+        if (localStorage.getItem('appInstalled') === 'true') {
+            console.log('App was uninstalled, resetting flags');
+            localStorage.removeItem('appInstalled');
+            localStorage.removeItem('installNotifications');
         }
+        return false;
+    }
+    
+    return true;
+}
+
 
         // Get notification data from localStorage
         function getNotificationData() {
@@ -947,35 +962,62 @@ const cacheBuster = new Date().getTime();
         }
 
         // PWA Install Event
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Show install button
-            const installBtn = document.getElementById('installButton');
-            if (!isAppInstalled()) {
-                installBtn.classList.remove('hidden');
-            }
-            
-            // Show notification prompt
-            showInstallPrompt();
-        });
+      // PWA Install Event - fires when app is installable
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    console.log('beforeinstallprompt fired - app is not installed');
+    
+    // Clear any old installation flags
+    localStorage.removeItem('appInstalled');
+    localStorage.removeItem('installNotifications');
+    
+    // Show install button
+    const installBtn = document.getElementById('installButton');
+    installBtn.classList.remove('hidden');
+    
+    // Show notification prompt
+    showInstallPrompt();
+});
 
-        // Install button click
-        document.getElementById('installButton')?.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                localStorage.setItem('appInstalled', 'true');
-                document.getElementById('installButton').classList.add('hidden');
-                document.getElementById('installPrompt').classList.remove('show');
-            }
-            
-            deferredPrompt = null;
-        });
+// Listen for app installation
+window.addEventListener('appinstalled', (e) => {
+    console.log('App installed successfully');
+    localStorage.setItem('appInstalled', 'true');
+    
+    // Hide install button
+    const installBtn = document.getElementById('installButton');
+    installBtn.classList.add('hidden');
+    
+    // Hide install prompt
+    document.getElementById('installPrompt').classList.remove('show');
+    
+    deferredPrompt = null;
+});
+
+
+       // Install button click
+document.getElementById('installButton')?.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+        console.log('Install prompt not available');
+        return;
+    }
+    
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    console.log('User choice:', outcome);
+    
+    if (outcome === 'accepted') {
+        localStorage.setItem('appInstalled', 'true');
+        document.getElementById('installButton').classList.add('hidden');
+        document.getElementById('installPrompt').classList.remove('show');
+    }
+    
+    deferredPrompt = null;
+});
+
 
         // Prompt install button
         document.getElementById('promptInstall')?.addEventListener('click', async () => {
@@ -1022,13 +1064,70 @@ const cacheBuster = new Date().getTime();
         });
 
         // Check if app was uninstalled
-        setInterval(() => {
-            if (!isAppInstalled() && localStorage.getItem('appInstalled') === 'true') {
-                localStorage.removeItem('appInstalled');
-                localStorage.removeItem('installNotifications');
-                location.reload();
-            }
-        }, 5000);
+        // Check if app was uninstalled - runs every 3 seconds
+setInterval(() => {
+    const wasInstalled = localStorage.getItem('appInstalled') === 'true';
+    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                                 window.navigator.standalone === true;
+    
+    // If was installed but no longer in standalone mode, user deleted the app
+    if (wasInstalled && !isCurrentlyInstalled) {
+        console.log('App was uninstalled - resetting installation state');
+        
+        // Clear all installation-related data
+        localStorage.removeItem('appInstalled');
+        localStorage.removeItem('installNotifications');
+        
+        // Reload to trigger beforeinstallprompt again
+        location.reload();
+    }
+    
+    // If not installed and beforeinstallprompt hasn't fired yet
+    if (!wasInstalled && !isCurrentlyInstalled && !deferredPrompt) {
+        // Check if install button should be visible
+        const installBtn = document.getElementById('installButton');
+        if (installBtn && !installBtn.classList.contains('hidden')) {
+            // BeforeInstallPrompt should fire, keep button visible
+            console.log('Waiting for beforeinstallprompt event...');
+        }
+    }
+}, 3000);
+// Detect when page becomes visible (user returns from uninstalling)
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        console.log('Page visible - checking installation status');
+        
+        const wasInstalled = localStorage.getItem('appInstalled') === 'true';
+        const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                                     window.navigator.standalone === true;
+        
+        // If was installed but not in standalone mode anymore
+        if (wasInstalled && !isCurrentlyInstalled) {
+            console.log('App uninstalled detected on page focus');
+            localStorage.removeItem('appInstalled');
+            localStorage.removeItem('installNotifications');
+            location.reload();
+        }
+    }
+});
+
+// Also check on page load
+window.addEventListener('load', () => {
+    const wasInstalled = localStorage.getItem('appInstalled') === 'true';
+    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                                 window.navigator.standalone === true;
+    
+    if (wasInstalled && !isCurrentlyInstalled) {
+        console.log('App uninstalled - clearing data on page load');
+        localStorage.removeItem('appInstalled');
+        localStorage.removeItem('installNotifications');
+        
+        // Reset notification data to allow prompts again
+        const data = { date: new Date().toDateString(), count: 0, dismissed: [] };
+        localStorage.setItem('installNotifications', JSON.stringify(data));
+    }
+});
+
 
         // Sidebar Menu
         const menuIcon = document.getElementById('menuIcon');
