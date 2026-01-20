@@ -7,6 +7,11 @@
     <meta name="description" content="Indian Railways Question Bank - Access question papers for various Railway exams. Convert to Mobile and Desktop App.">
     <title>Indian Railways Question Bank</title>
     <link rel="manifest" href="manifest.json">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -836,6 +841,10 @@
     </div>
 
     <script>
+
+        // Add this at the top of your script
+const cacheBuster = new Date().getTime();
+
         // Language Toggle System - Can be easily removed
         const LANGUAGE_CONFIG = {
             enabled: true, // Set to false to disable language switching
@@ -1084,42 +1093,28 @@
 
         // Auto-update detection for new versions
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('SW registered:', registration);
-                
-                // Check for updates every 60 seconds
-                setInterval(() => {
-                    registration.update();
-                }, 60000);
-                
-                // Listen for updates
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // New version available
-                            if (confirm('New version available! Reload to update?')) {
-                                newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                window.location.reload();
-                            }
-                        }
-                    });
+    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+        .then(registration => {
+            // Check for updates immediately and every 30 seconds
+            registration.update();
+            setInterval(() => registration.update(), 30000);
+            
+            // Auto-reload when update is found
+            registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'activated') {
+                        // Force reload without asking
+                        window.location.reload();
+                    }
                 });
-            })
-            .catch(error => {
-                console.log('SW registration failed:', error);
             });
-        
-        // Reload page when new service worker takes control
-        let refreshing;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (refreshing) return;
-            refreshing = true;
-            window.location.reload();
         });
-    }
+}
+       
+        
+       
+    
     </script>
 </body>
 </html>
