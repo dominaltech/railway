@@ -4,6 +4,7 @@
   "description": "Official Indian Railways Question Bank - Access comprehensive question papers for various Railway examinations on Mobile, Desktop, and iOS devices",
   "start_url": "/index.html",
   "display": "standalone",
+  
   "background_color": "#FFFFFF",
   "theme_color": "#9370DB",
   "orientation": "any",
@@ -104,4 +105,5 @@
     }
   ],
   "prefer_related_applications": false
+  "display_override": ["window-controls-overlay", "standalone", "fullscreen"]
 }
