@@ -1,16 +1,19 @@
-const CACHE_VERSION = new Date().getTime(); // Auto-generates version from timestamp
+// Auto-versioning based on timestamp
+const CACHE_VERSION = new Date().getTime();
 const CACHE_NAME = `indian-railways-qb-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `indian-railways-runtime-${CACHE_VERSION}`;
-
 
 // Files to cache on installation
 const STATIC_CACHE_URLS = [
   '/',
   '/index.html',
   '/pdfs.html',
+  '/my-exams.html',
   '/about.html',
   '/manifest.json',
-  '/favicon.png'
+  '/favicon.png',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
 ];
 
 // Install event - cache static resources
@@ -33,80 +36,88 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate event - clean up old caches
+// Activate event - clear ALL old caches for fresh updates
 self.addEventListener('activate', (event) => {
   console.log('Service Worker: Activating...');
-  
-  const currentCaches = [CACHE_NAME, RUNTIME_CACHE];
   
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
-        return cacheNames.filter((cacheName) => !currentCaches.includes(cacheName));
-      })
-      .then((cachesToDelete) => {
+        // Delete ALL old caches to force fresh content
         return Promise.all(
-          cachesToDelete.map((cacheToDelete) => {
-            console.log('Service Worker: Deleting old cache', cacheToDelete);
-            return caches.delete(cacheToDelete);
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
+              console.log('Service Worker: Deleting old cache', cacheName);
+              return caches.delete(cacheName);
+            }
           })
         );
       })
       .then(() => {
-        console.log('Service Worker: Activated');
+        console.log('Service Worker: Activated with fresh cache');
         return self.clients.claim();
       })
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - NETWORK FIRST strategy for HTML, cache for assets
 self.addEventListener('fetch', (event) => {
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
-  // Handle navigation requests
+  // Handle navigation requests - NETWORK FIRST
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match(event.request)
-        .then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
+      fetch(event.request)
+        .then((response) => {
+          // Don't cache if not successful
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
           }
 
-          return fetch(event.request)
-            .then((response) => {
-              // Don't cache if not successful
-              if (!response || response.status !== 200 || response.type !== 'basic') {
-                return response;
-              }
+          // Cache the new version
+          const responseToCache = response.clone();
+          caches.open(RUNTIME_CACHE)
+            .then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
 
-              const responseToCache = response.clone();
-              caches.open(RUNTIME_CACHE)
-                .then((cache) => {
-                  cache.put(event.request, responseToCache);
-                });
-
-              return response;
-            })
-            .catch(() => {
-              // Return offline page if available
-              return caches.match('/index.html');
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache if offline
+          return caches.match(event.request)
+            .then((cachedResponse) => {
+              return cachedResponse || caches.match('/index.html');
             });
         })
     );
     return;
   }
 
-  // Handle other requests (images, scripts, styles, etc.)
+  // Handle other requests (images, scripts, styles) - CACHE FIRST
   event.respondWith(
     caches.match(event.request)
       .then((cachedResponse) => {
         if (cachedResponse) {
+          // Return cached version but update in background
+          fetch(event.request)
+            .then((response) => {
+              if (response && response.status === 200) {
+                caches.open(RUNTIME_CACHE)
+                  .then((cache) => {
+                    cache.put(event.request, response);
+                  });
+              }
+            })
+            .catch(() => {});
+          
           return cachedResponse;
         }
 
+        // Not in cache, fetch from network
         return fetch(event.request)
           .then((response) => {
             // Don't cache if not successful
@@ -140,8 +151,8 @@ self.addEventListener('sync', (event) => {
 // Function to sync question papers
 async function syncQuestionPapers() {
   try {
-    // Implement your sync logic here
     console.log('Syncing question papers...');
+    // Implement your sync logic here
     return Promise.resolve();
   } catch (error) {
     console.error('Sync failed:', error);
@@ -199,7 +210,6 @@ self.addEventListener('notificationclick', (event) => {
       clients.openWindow('/pdfs.html')
     );
   } else if (event.action === 'dismiss') {
-    // Just close the notification
     return;
   } else {
     // Default action - open the app
@@ -247,6 +257,18 @@ self.addEventListener('message', (event) => {
             cacheNames.map((cacheName) => caches.delete(cacheName))
           );
         })
+        .then(() => {
+          console.log('All caches cleared');
+        })
+    );
+  }
+  
+  if (event.data && event.data.type === 'CHECK_UPDATE') {
+    event.waitUntil(
+      self.registration.update()
+        .then(() => {
+          console.log('Update check completed');
+        })
     );
   }
 });
@@ -264,8 +286,8 @@ self.addEventListener('periodicsync', (event) => {
 async function checkForUpdates() {
   try {
     console.log('Checking for updates...');
-    // Implement your update check logic here
-    // This could fetch new question papers from your server
+    // Force update check
+    await self.registration.update();
     return Promise.resolve();
   } catch (error) {
     console.error('Update check failed:', error);
@@ -284,7 +306,22 @@ async function manageCacheSize(cacheName, maxItems) {
   }
 }
 
-// Limit runtime cache size
+// Limit runtime cache size - check every 5 minutes
 setInterval(() => {
-  manageCacheSize(RUNTIME_CACHE, 50);
-}, 60000); // Check every minute
+  manageCacheSize(RUNTIME_CACHE, 100);
+}, 300000);
+
+// Force update check on service worker activation
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    self.clients.matchAll()
+      .then((clients) => {
+        clients.forEach((client) => {
+          client.postMessage({
+            type: 'SW_ACTIVATED',
+            message: 'Service Worker updated and activated'
+          });
+        });
+      })
+  );
+});
