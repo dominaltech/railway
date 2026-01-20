@@ -3,20 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#9370DB">
-    <meta name="description" content="Indian Railways Question Bank - Access question papers for various Railway exams. Convert to Mobile and Desktop App.">
-    <title>Indian Railways Question Bank</title>
+    <meta name="theme-color" content="#003366">
+    <meta name="description" content="RailBook - Indian Railway Question Papers and Exam Resources">
+    <title>RailBook - Indian Railway Question Bank</title>
     <link rel="manifest" href="manifest.json">
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="railway.png">
     <style>
         * {
             margin: 0;
@@ -25,1276 +16,988 @@
         }
 
         :root {
-            --primary-purple: #9370DB;
-            --light-purple: #B19CD9;
-            --dark-purple: #6A4C93;
-            --white: #FFFFFF;
+            --primary-blue: #003366;
+            --light-blue: #0055aa;
+            --white: #ffffff;
             --black: #000000;
-            --text-gray: #333333;
-            --border-gray: #E0E0E0;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gray: #666666;
+            --light-gray: #f5f5f5;
+            --border-gray: #e0e0e0;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--white);
             color: var(--black);
             line-height: 1.6;
-            padding-bottom: 70px;
-            overflow-x: hidden;
+            padding-bottom: 80px;
+            min-height: 100vh;
         }
 
-        /* Header Section */
-        .header-container {
-            position: relative;
-            background: linear-gradient(135deg, var(--white) 0%, #F8F8FF 100%);
-            border-bottom: 2px solid var(--border-gray);
-            padding: 15px 0;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-      .indian-railway-logo {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
+       .header-container {
+    background-color: var(--white);
+    border-bottom: 2px solid var(--border-gray);
+    padding: 15px 20px;
+    padding-top: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-purple);
-            line-height: 1.2;
-        }
+.menu-btn-fixed {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: var(--white);
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2001;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
 
-        .logo-text-small {
-            font-size: 12px;
-            color: var(--text-gray);
-            font-weight: 400;
-        }
+.menu-btn-fixed:hover {
+    background-color: var(--primary-blue);
+}
 
-        .header-actions {
+.menu-btn-fixed:hover .menu-icon {
+    stroke: var(--white);
+}
+
+.menu-btn-fixed .menu-icon {
+    width: 28px;
+    height: 28px;
+    stroke: var(--primary-blue);
+    transition: stroke 0.3s ease;
+}
+
+       .header-top {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+
+
+       
+
+        .header-center {
             display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 15px;
-            align-items: center;
         }
 
-        .language-toggle {
-            display: flex;
-            gap: 8px;
-            background: var(--white);
-            border: 2px solid var(--primary-purple);
-            border-radius: 25px;
-            padding: 6px 8px;
-            cursor: pointer;
-            transition: var(--transition);
+        .railway-logo {
+            width: 160px;
+            height: 160px;
         }
-
-        .language-toggle:hover {
-            background: var(--light-purple);
-            transform: scale(1.05);
-        }
-
-        .lang-btn {
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: none;
-            background: transparent;
-            color: var(--text-gray);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .lang-btn.active {
-            background: var(--primary-purple);
-            color: var(--white);
-        }
-
+.site-title {
+    font-size: 34px;
+    color: var(--primary-blue);
+    font-weight: 700;
+    text-align: center;
+    margin-top: 4px;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+}
         .install-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 18px;
-            background: var(--primary-purple);
-            color: var(--white);
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
         .install-btn:hover {
-            background: var(--dark-purple);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--shadow);
+            background-color: var(--light-blue);
         }
 
-        .install-btn.hidden {
-            display: none;
+        .install-btn svg {
+            width: 20px;
+            height: 20px;
         }
 
-        .menu-icon {
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
+        .lang-switch {
+    background-color: var(--white);
+    border: 2px solid var(--primary-blue);
+    color: var(--primary-blue);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
 
-        .menu-icon:hover {
-            transform: rotate(90deg);
-        }
+.lang-switch:hover {
+    background-color: var(--light-blue);
+    color: var(--white);
+    border-color: var(--light-blue);
+}
 
-        /* Sidebar Menu */
-        .sidebar {
+.lang-switch::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background-color: var(--primary-blue);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.lang-switch:hover::before {
+    background-color: var(--white);
+}
+
+
+        .side-menu {
             position: fixed;
+            left: -280px;
             top: 0;
-            left: -300px;
             width: 280px;
             height: 100vh;
-            background: var(--white);
-            box-shadow: 2px 0 15px var(--shadow);
-            transition: var(--transition);
-            z-index: 1000;
-            overflow-y: auto;
+            background-color: var(--white);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 2000;
+            padding: 20px;
         }
 
-        .sidebar.active {
+        .side-menu.active {
             left: 0;
         }
 
-        .sidebar-header {
-            background: var(--primary-purple);
-            color: var(--white);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .sidebar-header h3 {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .close-menu {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .sidebar-content {
-            padding: 20px 0;
-        }
-
-        .menu-item {
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: var(--text-gray);
-            text-decoration: none;
-            transition: var(--transition);
-            border-left: 4px solid transparent;
-        }
-
-        .menu-item:hover {
-            background: #F8F8FF;
-            border-left-color: var(--primary-purple);
-            color: var(--primary-purple);
-        }
-
-        .menu-item svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        .overlay {
+        .menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0,0,0,0.5);
             display: none;
-            z-index: 999;
+            z-index: 1999;
         }
 
-        .overlay.active {
+        .menu-overlay.active {
             display: block;
         }
 
-        /* Welcome Section */
+        .menu-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .menu-items {
+            list-style: none;
+        }
+
+        .menu-items li {
+            margin-bottom: 15px;
+        }
+
+        .menu-items a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 16px;
+            display: block;
+            padding: 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-items a:hover {
+            background-color: var(--light-gray);
+        }
+
         .welcome-section {
-            background: linear-gradient(135deg, #F8F8FF 0%, var(--white) 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+            color: var(--white);
             padding: 40px 20px;
             text-align: center;
-            border-bottom: 1px solid var(--border-gray);
         }
 
-        .welcome-title {
-            font-size: clamp(24px, 5vw, 32px);
-            color: var(--primary-purple);
+        .welcome-section h1 {
+            font-size: 28px;
             margin-bottom: 15px;
             font-weight: 700;
-            letter-spacing: -0.5px;
         }
 
-        .welcome-subtitle {
-            font-size: clamp(14px, 3vw, 16px);
-            color: var(--text-gray);
-            max-width: 700px;
+        .welcome-section p {
+            font-size: 16px;
+            max-width: 800px;
             margin: 0 auto;
             line-height: 1.8;
         }
 
-        /* Main Content */
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        .action-container {
+        .cta-section {
             text-align: center;
             margin-bottom: 50px;
         }
 
-        .download-pdf-btn {
+        .download-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 18px 50px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            padding: 18px 45px;
-            background: var(--primary-purple);
-            color: var(--white);
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 8px 20px rgba(147, 112, 219, 0.3);
-            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,51,102,0.3);
         }
 
-        .download-pdf-btn:hover {
-            background: var(--dark-purple);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(147, 112, 219, 0.4);
+        .download-btn:hover {
+            background-color: var(--light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,51,102,0.4);
         }
 
-        .download-pdf-btn svg {
+        .download-btn svg {
             width: 24px;
             height: 24px;
         }
 
-        /* Info Section */
         .info-section {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 40px 30px;
-            box-shadow: 0 4px 20px var(--shadow);
-            margin-bottom: 40px;
+            margin-top: 50px;
         }
 
-        .info-section h2 {
-            color: var(--primary-purple);
-            font-size: clamp(22px, 4vw, 28px);
-            margin-bottom: 20px;
-            text-align: center;
+        .info-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .info-card h2 {
+            color: var(--primary-blue);
+            font-size: 24px;
+            margin-bottom: 15px;
             font-weight: 700;
         }
 
-        .info-content {
-            color: var(--text-gray);
-            font-size: clamp(14px, 2.5vw, 16px);
-            line-height: 1.9;
-            text-align: justify;
+        .info-card p {
+            color: var(--gray);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 12px;
         }
 
-        .info-content p {
-            margin-bottom: 15px;
-        }
-
-        /* Features Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
-            margin-top: 40px;
+            margin-top: 30px;
         }
 
-        .feature-card {
-            background: var(--white);
-            border: 2px solid var(--border-gray);
-            border-radius: 12px;
-            padding: 30px 25px;
+        .feature-item {
+            background-color: var(--light-gray);
+            padding: 25px;
+            border-radius: 8px;
             text-align: center;
-            transition: var(--transition);
+            transition: transform 0.3s ease;
         }
 
-        .feature-card:hover {
-            border-color: var(--primary-purple);
-            box-shadow: 0 8px 25px var(--shadow);
+        .feature-item:hover {
             transform: translateY(-5px);
         }
 
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 20px;
+        .feature-item svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 15px;
+            fill: var(--primary-blue);
         }
 
-        .feature-card h3 {
-            color: var(--primary-purple);
+        .feature-item h3 {
+            color: var(--primary-blue);
             font-size: 18px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
-        .feature-card p {
-            color: var(--text-gray);
+        .feature-item p {
+            color: var(--gray);
             font-size: 14px;
-            line-height: 1.6;
         }
 
-        /* Bottom Navigation */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--white);
-            border-top: 2px solid var(--border-gray);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 12px 0;
-            z-index: 998;
-            box-shadow: 0 -2px 10px var(--shadow);
-        }
-
-        .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    text-decoration: none;
-    color: var(--text-gray);
-    transition: var(--transition);
-    padding: 8px 15px;
-    border-radius: 12px;
-    min-width: 70px;
-    flex: 1;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--white);
+    border-top: 2px solid var(--border-gray);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 12px 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+    z-index: 999;
 }
 
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 12px;
+            transition: color 0.3s ease;
+            flex: 1;
+        }
 
-        .nav-item:hover,
         .nav-item.active {
-            color: var(--primary-purple);
-            background: #F8F8FF;
+            color: var(--primary-blue);
         }
 
         .nav-item svg {
             width: 24px;
             height: 24px;
+            margin-bottom: 4px;
+            fill: currentColor;
         }
 
-        .nav-item span {
-            font-size: 12px;
-            font-weight: 600;
+        .notification-popup {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background-color: var(--white);
+            border: 2px solid var(--primary-blue);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            max-width: 320px;
+            display: none;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
         }
 
-        /* Responsive Design */
-        @media screen and (max-width: 480px) {
-            .header-top {
-                padding: 0 12px;
-            }
-
-            .logo-container {
-                gap: 8px;
-            }
-
-           .indian-railway-logo {
-        width: 45px;
-        height: 45px;
-    }
-
-            .logo-text {
-                font-size: 14px;
-            }
-
-            .logo-text-small {
-                font-size: 10px;
-            }
-
-            .install-btn {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
-
-            .install-btn span {
-                display: none;
-            }
-
-            .lang-btn {
-                padding: 5px 10px;
-                font-size: 11px;
-            }
-
-            .welcome-section {
-                padding: 25px 15px;
-            }
-
-            .main-content {
-                padding: 30px 15px;
-            }
-
-            .info-section {
-                padding: 25px 20px;
-            }
-
-            .download-pdf-btn {
-                padding: 15px 35px;
-                font-size: 16px;
-            }
-
-           .nav-item {
-        padding: 5px 8px;
-        min-width: 60px;
-    }
-    
-    .nav-item span {
-        font-size: 10px;
-    }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        @media screen and (min-width: 768px) {
-            .welcome-section {
-                padding: 60px 40px;
-            }
-
-            .main-content {
-                padding: 60px 40px;
-            }
-
-            .info-section {
-                padding: 50px 40px;
-            }
-        }
-
-        @media screen and (min-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .nav-item {
-                min-width: 100px;
-            }
-        }
-
-        /* Animations */
         @keyframes slideIn {
             from {
+                transform: translateX(400px);
                 opacity: 0;
-                transform: translateY(20px);
             }
             to {
+                transform: translateX(0);
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
-        .animate-in {
-            animation: slideIn 0.6s ease-out;
-        }
-
-        /* PWA Install Prompt */
-        .install-prompt {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--white);
-            border: 2px solid var(--primary-purple);
-            border-radius: 16px;
-            padding: 20px 25px;
-            box-shadow: 0 8px 30px var(--shadow);
-            z-index: 997;
-            display: none;
-            max-width: 90%;
-            width: 400px;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .install-prompt.show {
+        .notification-popup.show {
             display: block;
         }
 
-        .install-prompt-content {
+        .notification-header {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .install-prompt-header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
-        .install-prompt h3 {
-            color: var(--primary-purple);
-            font-size: 16px;
-            font-weight: 700;
+        .notification-header svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--primary-blue);
         }
 
-        .close-prompt {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
+        .notification-header h3 {
+            color: var(--primary-blue);
+            font-size: 18px;
         }
 
-        .install-prompt p {
-            color: var(--text-gray);
+        .notification-body p {
+            color: var(--black);
             font-size: 14px;
-            line-height: 1.6;
+            margin-bottom: 15px;
         }
 
-        .install-prompt-actions {
+        .notification-actions {
             display: flex;
             gap: 10px;
         }
 
-        .prompt-btn {
+        .notification-btn {
             flex: 1;
-            padding: 10px 20px;
+            padding: 10px;
             border: none;
-            border-radius: 25px;
-            font-weight: 600;
+            border-radius: 6px;
             cursor: pointer;
-            transition: var(--transition);
             font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        .prompt-btn-install {
-            background: var(--primary-purple);
+        .btn-install-notif {
+            background-color: var(--primary-blue);
             color: var(--white);
         }
 
-        .prompt-btn-install:hover {
-            background: var(--dark-purple);
+        .btn-install-notif:hover {
+            background-color: var(--light-blue);
         }
 
-        .prompt-btn-later {
-            background: transparent;
-            color: var(--text-gray);
-            border: 1px solid var(--border-gray);
+        .btn-later {
+            background-color: var(--light-gray);
+            color: var(--black);
         }
 
-        .prompt-btn-later:hover {
-            background: #F8F8FF;
+        .btn-later:hover {
+            background-color: var(--border-gray);
         }
+
+        @media screen and (max-width: 380px) {
+
+
+
+          
+    .menu-btn-fixed {
+        top: 10px;
+        left: 10px;
+        padding: 8px;
+    }
+
+    .menu-btn-fixed .menu-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .header-container {
+        padding-top: 10px;
+    }
+
+    .lang-switch {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .lang-indicator {
+        font-size: 11px;
+    }
+
+    .lang-text {
+        font-size: 14px;
+    }
+
+    .welcome-section h1 {
+        font-size: 22px;
+    }
+
+
+            .welcome-section p {
+                font-size: 14px;
+            }
+
+            .download-btn {
+                padding: 15px 35px;
+                font-size: 16px;
+            }
+
+            .info-card {
+                padding: 20px;
+            }
+
+            .info-card h2 {
+                font-size: 20px;
+            }
+
+            .info-card p {
+                font-size: 14px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+          
+.railway-logo {
+    width: 65px;
+    height: 65px;
+}
+.site-title {
+    font-size: 18px;
+    margin-top: 1px;
+    line-height: 1.2;
+    letter-spacing: 0.3px;
+}
+
+            .notification-popup {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+
+
+        .lang-indicator {
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.lang-text {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+       
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header-container">
+
+    <button class="menu-btn-fixed" id="menuBtn" aria-label="Menu">
+        <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <div class="header-container">
         <div class="header-top">
-            <div class="logo-container">
-    <img src="railway1.png" alt="Indian Railways Logo" class="indian-railway-logo">
-    <div>
-        <div class="logo-text" data-en="Indian Railways" data-hi="भारतीय रेलवे">Indian Railways</div>
-        <div class="logo-text-small" data-en="Question Bank" data-hi="प्रश्न बैंक">Question Bank</div>
-    </div>
-</div>
+           
 
-            
-            <div class="header-actions">
-                <div class="language-toggle">
-                    <button class="lang-btn active" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="hi">हिन्दी</button>
-                </div>
-                
-                <button class="install-btn hidden" id="installButton">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                    </svg>
-                    <span data-en="Install App" data-hi="ऐप इंस्टॉल करें">Install App</span>
-                </button>
-                
-                <svg class="menu-icon" id="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <line x1="3" y1="12" x2="21" y2="12"/>
-                    <line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
-            </div>
-        </div>
-    </header>
+            <button class="lang-switch" id="langSwitch">
+    <span class="lang-indicator">EN</span>
+    <span class="lang-text">⇄</span>
+    <span class="lang-indicator">हिन्दी</span>
+</button>
 
-    <!-- Sidebar Menu -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3 data-en="Menu" data-hi="मेन्यू">Menu</h3>
-            <svg class="close-menu" id="closeMenu" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-        </div>
-        <div class="sidebar-content">
-            <a href="index.html" class="menu-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
-                <span data-en="Home" data-hi="होम">Home</span>
-            </a>
-            <a href="pdfs.html" class="menu-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 9V3.5L18.5 9H13z"/>
-                </svg>
-                <span data-en="Question Papers" data-hi="प्रश्न पत्र">Question Papers</span>
-            </a>
-            <a href="about.html" class="menu-item">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-                <span data-en="About Us" data-hi="हमारे बारे में">About Us</span>
-            </a>
-            <a href="#" class="menu-item" id="shareApp">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-                </svg>
-                <span data-en="Share" data-hi="शेयर करें">Share</span>
-            </a>
-        </div>
-    </div>
 
-    <div class="overlay" id="overlay"></div>
-
-    <!-- Welcome Section -->
-    <section class="welcome-section animate-in">
-        <h1 class="welcome-title" data-en="Welcome to Indian Railways Question Bank" data-hi="भारतीय रेलवे प्रश्न बैंक में आपका स्वागत है">
-            Welcome to RailBook: <br> Indian Railways Question Bank
-        </h1>
-        <p class="welcome-subtitle" data-en="Access comprehensive question papers for various Railway examinations. Our platform provides organized study materials to help you prepare effectively. Install our app for offline access and enhanced learning experience on Mobile, Desktop, and iOS devices." data-hi="विभिन्न रेलवे परीक्षाओं के लिए व्यापक प्रश्न पत्र प्राप्त करें। हमारा प्लेटफॉर्म आपको प्रभावी ढंग से तैयारी करने में मदद करने के लिए व्यवस्थित अध्ययन सामग्री प्रदान करता है। ऑफलाइन पहुंच और बेहतर सीखने के अनुभव के लिए मोबाइल, डेस्कटॉप और iOS उपकरणों पर हमारा ऐप इंस्टॉल करें।">
-            Access comprehensive question papers for various Railway examinations. Our platform provides organized study materials to help you prepare effectively. Install our app for offline access and enhanced learning experience on Mobile, Desktop, and iOS devices.
-        </p>
-    </section>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="action-container animate-in">
-            <a href="pdfs.html" class="download-pdf-btn">
+            <button class="install-btn" id="installBtn" style="display: none;">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
                 </svg>
-                <span data-en="Download PDFs" data-hi="PDFs डाउनलोड करें">Download PDFs</span>
-            </a>
+                <span data-en="Install App" data-hi="ऐप इंस्टॉल करें">Install App</span>
+            </button>
         </div>
 
-        <section class="info-section animate-in">
-            <h2 data-en="About This Platform" data-hi="इस प्लेटफॉर्म के बारे में">About This Platform</h2>
-            <div class="info-content">
-                <p data-en="The Indian Railways Question Bank is an official digital resource designed to assist candidates preparing for various railway recruitment examinations. This comprehensive platform consolidates question papers from multiple examination categories, providing aspirants with authentic study materials curated directly by Indian Railways authorities." data-hi="भारतीय रेलवे प्रश्न बैंक विभिन्न रेलवे भर्ती परीक्षाओं की तैयारी करने वाले उम्मीदवारों की सहायता के लिए डिज़ाइन किया गया एक आधिकारिक डिजिटल संसाधन है। यह व्यापक मंच कई परीक्षा श्रेणियों के प्रश्न पत्रों को समेकित करता है, जो भारतीय रेलवे प्राधिकरणों द्वारा सीधे तैयार की गई प्रामाणिक अध्ययन सामग्री के साथ आकांक्षियों को प्रदान करता है।">
-                    The Indian Railways Question Bank is an official digital resource designed to assist candidates preparing for various railway recruitment examinations. This comprehensive platform consolidates question papers from multiple examination categories, providing aspirants with authentic study materials curated directly by Indian Railways authorities.
-                </p>
-                <!-- <p data-en="Our platform transforms seamlessly into a Progressive Web Application (PWA), enabling you to install it as a native application on your smartphone, tablet, or desktop computer. This conversion ensures offline accessibility, faster loading times, and an app-like experience without consuming significant device storage. The installation process is simple and works across Android, iOS, Windows, macOS, and Linux operating systems." data-hi="हमारा प्लेटफ़ॉर्म प्रगतिशील वेब एप्लिकेशन (PWA) में सहजता से परिवर्तित हो जाता है, जिससे आप इसे अपने स्मार्टफ़ोन, टैबलेट या डेस्कटॉप कंप्यूटर पर एक मूल एप्लिकेशन के रूप में इंस्टॉल कर सकते हैं। यह रूपांतरण महत्वपूर्ण डिवाइस स्टोरेज की खपत के बिना ऑफ़लाइन पहुंच, तेज़ लोडिंग समय और ऐप जैसा अनुभव सुनिश्चित करता है। इंस्टॉलेशन प्रक्रिया सरल है और Android, iOS, Windows, macOS और Linux ऑपरेटिंग सिस्टम पर काम करती है।">
-                    Our platform transforms seamlessly into a Progressive Web Application (PWA), enabling you to install it as a native application on your smartphone, tablet, or desktop computer. This conversion ensures offline accessibility, faster loading times, and an app-like experience without consuming significant device storage. The installation process is simple and works across Android, iOS, Windows, macOS, and Linux operating systems.
-                </p>
-                <p data-en="The question bank interface is optimized for all screen sizes, from compact mobile devices with 380px width to large desktop monitors. We have implemented responsive design principles ensuring consistent readability and usability regardless of your device. Navigate through categorized sections, download PDF materials, and track your preparation progress with an intuitive user interface designed specifically for Indian Railway examination candidates." data-hi="प्रश्न बैंक इंटरफ़ेस सभी स्क्रीन आकारों के लिए अनुकूलित है, 380px चौड़ाई वाले कॉम्पैक्ट मोबाइल उपकरणों से लेकर बड़े डेस्कटॉप मॉनिटर तक। हमने उत्तरदायी डिज़ाइन सिद्धांतों को लागू किया है जो आपके डिवाइस की परवाह किए बिना सुसंगत पठनीयता और उपयोगिता सुनिश्चित करते हैं। श्रेणीबद्ध अनुभागों के माध्यम से नेविगेट करें, PDF सामग्री डाउनलोड करें, और भारतीय रेलवे परीक्षा उम्मीदवारों के लिए विशेष रूप से डिज़ाइन किए गए सहज उपयोगकर्ता इंटरफ़ेस के साथ अपनी तैयारी की प्रगति को ट्रैक करें।">
-                    The question bank interface is optimized for all screen sizes, from compact mobile devices with 380px width to large desktop monitors. We have implemented responsive design principles ensuring consistent readability and usability regardless of your device. Navigate through categorized sections, download PDF materials, and track your preparation progress with an intuitive user interface designed specifically for Indian Railway examination candidates.
-                </p> -->
-            </div>
-        </section>
+       <div class="header-center">
+    <img src="railway1.png" alt="Indian Railway Logo" class="railway-logo">
+    <h2 class="site-title">RailBook - Railway Exam Question Banks</h2>
+</div>
+    </div>
 
-        <section class="features-grid">
-            <div class="feature-card">
-                <svg class="feature-icon" viewBox="0 0 24 24" fill="#9370DB">
-                    <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
-                </svg>
-                <h3 data-en="Mobile App" data-hi="मोबाइल ऐप">Mobile App</h3>
-                <p data-en="Install on Android and iOS devices for on-the-go preparation with offline access to all materials." data-hi="सभी सामग्रियों तक ऑफ़लाइन पहुंच के साथ चलते-फिरते तैयारी के लिए Android और iOS उपकरणों पर इंस्टॉल करें।">
-                    Install on Android and iOS devices for on-the-go preparation with offline access to all materials.
-                </p>
-            </div>
+    <div class="side-menu" id="sideMenu">
+        <button class="menu-close" id="menuClose">&times;</button>
+        <ul class="menu-items">
+    <li><a href="index.html" data-en="Home" data-hi="होम">Home</a></li>
+    <li><a href="pdfs.html" data-en="Download PDFs" data-hi="पीडीएफ डाउनलोड करें">Download PDFs</a></li>
+    <li><a href="myexams.html" data-en="My Exams" data-hi="मेरी परीक्षाएं">My Exams</a></li>
+    <li><a href="about.html" data-en="About Us" data-hi="हमारे बारे में">About Us</a></li>
+    <li><a href="#" data-en="Exam Resources" data-hi="परीक्षा संसाधन">Exam Resources</a></li>
+    <li><a href="#" data-en="Contact" data-hi="संपर्क करें">Contact</a></li>
+</ul>
+    </div>
+    <div class="menu-overlay" id="menuOverlay"></div>
 
-            <div class="feature-card">
-                <svg class="feature-icon" viewBox="0 0 24 24" fill="#9370DB">
-                    <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
-                </svg>
-                <h3 data-en="Desktop App" data-hi="डेस्कटॉप ऐप">Desktop App</h3>
-                <p data-en="Convert to desktop application on Windows, macOS, and Linux for comprehensive study sessions." data-hi="व्यापक अध्ययन सत्रों के लिए Windows, macOS और Linux पर डेस्कटॉप एप्लिकेशन में कनवर्ट करें।">
-                    Convert to desktop application on Windows, macOS, and Linux for comprehensive study sessions.
-                </p>
-            </div>
+    <section class="welcome-section">
+        <h1 data-en="Welcome to Indian Railways" data-hi="भारतीय रेलवे में आपका स्वागत है">Welcome to Indian Railways</h1>
+        <p data-en="You can access Question Papers for various Railway Exams here. RailBook is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations." data-hi="आप यहां विभिन्न रेलवे परीक्षाओं के प्रश्न पत्र प्राप्त कर सकते हैं। रेलबुक रेलवे परीक्षा की तैयारी के लिए आपका व्यापक डिजिटल प्लेटफ़ॉर्म है, जो पिछले वर्षों के प्रश्न पत्र, अध्ययन सामग्री और संसाधन तक त्वरित पहुंच प्रदान करता है। आरआरबी, आरपीएफ और अन्य रेलवे भर्ती परीक्षाओं के लिए कुशलतापूर्वक तैयारी करें।">You can access Question Papers for various Railway Exams here. RailBook is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations.</p>
+    </section>
 
-            <div class="feature-card">
-                <svg class="feature-icon" viewBox="0 0 24 24" fill="#9370DB">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+    <main class="main-content">
+        <div class="cta-section">
+            <button class="download-btn" onclick="window.location.href='pdfs.html'">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
                 </svg>
-                <h3 data-en="Official Content" data-hi="आधिकारिक सामग्री">Official Content</h3>
-                <p data-en="Authentic question papers provided directly by Indian Railways for reliable exam preparation." data-hi="विश्वसनीय परीक्षा की तैयारी के लिए भारतीय रेलवे द्वारा सीधे प्रदान किए गए प्रामाणिक प्रश्न पत्र।">
-                    Authentic question papers provided directly by Indian Railways for reliable exam preparation.
-                </p>
+                <span data-en="Download PDFs" data-hi="पीडीएफ डाउनलोड करें">Download PDFs</span>
+            </button>
+        </div>
+
+        <div class="info-section">
+            <div class="info-card">
+                <h2 data-en="About RailBook" data-hi="रेलबुक के बारे में">About RailBook</h2>
+                <p data-en="RailBook is an official initiative by Indian Railways to provide aspirants with a centralized platform for accessing Railway examination resources. This platform offers previous year question papers, practice tests, and study materials for various Railway recruitment examinations including RRB NTPC, RRB Group D, RPF Constable, and other technical and non-technical posts." data-hi="रेलबुक भारतीय रेलवे द्वारा रेलवे परीक्षा संसाधनों तक पहुँचने के लिए आकांक्षियों को एक केंद्रीकृत मंच प्रदान करने की एक आधिकारिक पहल है। यह प्लेटफ़ॉर्म आरआरबी एनटीपीसी, आरआरबी ग्रुप डी, आरपीएफ कांस्टेबल और अन्य तकनीकी और गैर-तकनीकी पदों सहित विभिन्न रेलवे भर्ती परीक्षाओं के लिए पिछले वर्षों के प्रश्न पत्र, अभ्यास परीक्षण और अध्ययन सामग्री प्रदान करता है।">RailBook is an official initiative by Indian Railways to provide aspirants with a centralized platform for accessing Railway examination resources. This platform offers previous year question papers, practice tests, and study materials for various Railway recruitment examinations including RRB NTPC, RRB Group D, RPF Constable, and other technical and non-technical posts.</p>
+                <p data-en="What makes RailBook unique is its ability to transform into a Progressive Web Application (PWA). This means you can install RailBook as an application on your mobile phone, tablet, or desktop computer. Once installed, you can access all resources offline, receive notifications about new content, and enjoy a seamless app-like experience across all your devices." data-hi="रेलबुक को अद्वितीय बनाता है इसकी प्रोग्रेसिव वेब एप्लिकेशन (पीडब्ल्यूए) में बदलने की क्षमता। इसका मतलब है कि आप अपने मोबाइल फोन, टैबलेट या डेस्कटॉप कंप्यूटर पर रेलबुक को एक एप्लिकेशन के रूप में इंस्टॉल कर सकते हैं। एक बार इंस्टॉल होने के बाद, आप सभी संसाधनों को ऑफलाइन एक्सेस कर सकते हैं, नई सामग्री के बारे में सूचनाएं प्राप्त कर सकते हैं, और अपने सभी उपकरणों पर एक सहज ऐप जैसा अनुभव का आनंद ले सकते हैं।">What makes RailBook unique is its ability to transform into a Progressive Web Application (PWA). This means you can install RailBook as an application on your mobile phone, tablet, or desktop computer. Once installed, you can access all resources offline, receive notifications about new content, and enjoy a seamless app-like experience across all your devices.</p>
             </div>
 
-            <div class="feature-card">
-                <svg class="feature-icon" viewBox="0 0 24 24" fill="#9370DB">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                </svg>
-                <h3 data-en="Offline Access" data-hi="ऑफलाइन पहुंच">Offline Access</h3>
-                <p data-en="Once installed, access all features without internet connectivity for uninterrupted studying." data-hi="एक बार इंस्टॉल करने के बाद, निर्बाध अध्ययन के लिए इंटरनेट कनेक्टिविटी के बिना सभी सुविधाओं तक पहुंचें।">
-                    Once installed, access all features without internet connectivity for uninterrupted studying.
-                </p>
-            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
+                    </svg>
+                    <h3 data-en="Mobile App" data-hi="मोबाइल ऐप">Mobile App</h3>
+                    <p data-en="Install on Android and iOS devices for on-the-go access" data-hi="चलते-फिरते एक्सेस के लिए Android और iOS डिवाइस पर इंस्टॉल करें">Install on Android and iOS devices for on-the-go access</p>
+                </div>
 
-            <div class="feature-card">
-                <svg class="feature-icon" viewBox="0 0 24 24" fill="#9370DB">
-                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                </svg>
-                <h3 data-en="Regular Updates" data-hi="नियमित अपडेट">Regular Updates</h3>
-                <p data-en="Receive notifications about new question papers and updates directly through the app." data-hi="ऐप के माध्यम से सीधे नए प्रश्न पत्रों और अपडेट के बारे में सूचनाएं प्राप्त करें।">
-                    Receive notifications about new question papers and updates directly through the app.
-                </p>
-            </div>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
+                    </svg>
+                    <h3 data-en="Desktop App" data-hi="डेस्कटॉप ऐप">Desktop App</h3>
+                    <p data-en="Install on Windows, Mac, and Linux for desktop convenience" data-hi="डेस्कटॉप सुविधा के लिए Windows, Mac और Linux पर इंस्टॉल करें">Install on Windows, Mac, and Linux for desktop convenience</p>
+                </div>
 
-            <div class="feature-card">
-                <svg class="feature-icon" viewBox="0 0 24 24" fill="#9370DB">
-                    <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
-                </svg>
-                <h3 data-en="Bilingual Support" data-hi="द्विभाषी समर्थन">Bilingual Support</h3>
-                <p data-en="Switch between English and Hindi languages with a single click for better comprehension." data-hi="बेहतर समझ के लिए एक क्लिक से अंग्रेजी और हिंदी भाषाओं के बीच स्विच करें।">
-                    Switch between English and Hindi languages with a single click for better comprehension.
-                </p>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                    </svg>
+                    <h3 data-en="Smart Notifications" data-hi="स्मार्ट सूचनाएं">Smart Notifications</h3>
+                    <p data-en="Get timely reminders and updates about new content" data-hi="नई सामग्री के बारे में समय पर अनुस्मारक और अपडेट प्राप्त करें">Get timely reminders and updates about new content</p>
+                </div>
+
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62l1.45 1.45C23.16 18.16 24 16.68 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74C2.56 8.15 0 10.77 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z"/>
+                    </svg>
+                    <h3 data-en="Offline Access" data-hi="ऑफलाइन एक्सेस">Offline Access</h3>
+                    <p data-en="Access downloaded content even without internet connection" data-hi="इंटरनेट कनेक्शन के बिना भी डाउनलोड की गई सामग्री तक पहुंचें">Access downloaded content even without internet connection</p>
+                </div>
+
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                    </svg>
+                    <h3 data-en="Regular Updates" data-hi="नियमित अपडेट">Regular Updates</h3>
+                    <p data-en="Fresh content loaded from official sources automatically" data-hi="आधिकारिक स्रोतों से ताज़ा सामग्री स्वचालित रूप से लोड होती है">Fresh content loaded from official sources automatically</p>
+                </div>
+
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                    </svg>
+                    <h3 data-en="Official Content" data-hi="आधिकारिक सामग्री">Official Content</h3>
+                    <p data-en="Verified and authentic study materials from Indian Railways" data-hi="भारतीय रेलवे से सत्यापित और प्रामाणिक अध्ययन सामग्री">Verified and authentic study materials from Indian Railways</p>
+                </div>
             </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
     <a href="index.html" class="nav-item active">
-        <svg viewBox="0 0 24 24" fill="currentColor">
+        <svg viewBox="0 0 24 24">
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
         </svg>
         <span data-en="Home" data-hi="होम">Home</span>
     </a>
     <a href="pdfs.html" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 9V3.5L18.5 9H13z"/>
+        <svg viewBox="0 0 24 24">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
         </svg>
-        <span data-en="PDFs" data-hi="PDFs">PDFs</span>
+        <span data-en="PDFs" data-hi="पीडीएफ">PDFs</span>
     </a>
-    <a href="my-exams.html" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
+    <a href="myexams.html" class="nav-item">
+        <svg viewBox="0 0 24 24">
+            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
         </svg>
         <span data-en="My Exams" data-hi="मेरी परीक्षाएं">My Exams</span>
     </a>
     <a href="about.html" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="currentColor">
+        <svg viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
         </svg>
-        <span data-en="About" data-hi="हमारे बारे में">About</span>
+        <span data-en="About" data-hi="हमारे बारे">About</span>
     </a>
 </nav>
-
-    <!-- Install Prompt -->
-    <div class="install-prompt" id="installPrompt">
-        <div class="install-prompt-content">
-            <div class="install-prompt-header">
-                <h3 data-en="Install Our App" data-hi="हमारा ऐप इंस्टॉल करें">Install Our App</h3>
-                <svg class="close-prompt" id="closePrompt" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </div>
-            <p data-en="Get instant access to question papers even offline. Install now for a better experience!" data-hi="यहां तक कि ऑफ़लाइन भी प्रश्न पत्रों तक त्वरित पहुंच प्राप्त करें। बेहतर अनुभव के लिए अभी इंस्टॉल करें!">
-                Get instant access to question papers even offline. Install now for a better experience!
-            </p>
-            <div class="install-prompt-actions">
-                <button class="prompt-btn prompt-btn-install" id="promptInstall" data-en="Install" data-hi="इंस्टॉल करें">Install</button>
-                <button class="prompt-btn prompt-btn-later" id="promptLater" data-en="Later" data-hi="बाद में">Later</button>
-            </div>
+    <div class="notification-popup" id="notificationPopup">
+        <div class="notification-header">
+            <svg viewBox="0 0 24 24">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            <h3 data-en="Install RailBook" data-hi="रेलबुक इंस्टॉल करें">Install RailBook</h3>
+        </div>
+        <div class="notification-body">
+            <p data-en="Install RailBook app for quick access to Railway exam resources and offline support!" data-hi="रेलवे परीक्षा संसाधनों और ऑफलाइन समर्थन तक त्वरित पहुंच के लिए रेलबुक ऐप इंस्टॉल करें!">Install RailBook app for quick access to Railway exam resources and offline support!</p>
+        </div>
+        <div class="notification-actions">
+            <button class="notification-btn btn-install-notif" id="installFromNotif">
+                <span data-en="Install" data-hi="इंस्टॉल करें">Install</span>
+            </button>
+            <button class="notification-btn btn-later" id="laterBtn">
+                <span data-en="Later" data-hi="बाद में">Later</span>
+            </button>
         </div>
     </div>
 
-   <script>
-    // Language Toggle System - Can be easily removed
-    const LANGUAGE_CONFIG = {
-        enabled: true, // Set to false to disable language switching
-        defaultLanguage: 'en'
-    };
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
 
-    let currentLanguage = LANGUAGE_CONFIG.defaultLanguage;
+        // Language Management
+        const LANGUAGE_FEATURE_ENABLED = true; // Set to false to disable language switching
 
-    function toggleLanguage(lang) {
-        if (!LANGUAGE_CONFIG.enabled) return;
-        
-        currentLanguage = lang;
-        localStorage.setItem('preferredLanguage', lang);
-        
-        // Update UI
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.lang === lang);
-        });
-        
-        // Update all translatable elements
-        document.querySelectorAll('[data-en]').forEach(element => {
-            const text = element.getAttribute(`data-${lang}`);
-            if (text) {
-                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                    element.placeholder = text;
-                } else {
-                    element.textContent = text;
+        class LanguageManager {
+            constructor() {
+                this.currentLang = localStorage.getItem('language') || 'en';
+                this.langSwitch = document.getElementById('langSwitch');
+                this.init();
+            }
+
+            init() {
+                if (!LANGUAGE_FEATURE_ENABLED) {
+                    if (this.langSwitch) this.langSwitch.style.display = 'none';
+                    return;
+                }
+                this.applyLanguage();
+                if (this.langSwitch) {
+                    this.langSwitch.addEventListener('click', () => this.toggleLanguage());
                 }
             }
-        });
-    }
 
-    // Initialize language
-    if (LANGUAGE_CONFIG.enabled) {
-        const savedLanguage = localStorage.getItem('preferredLanguage') || LANGUAGE_CONFIG.defaultLanguage;
-        toggleLanguage(savedLanguage);
-        
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => toggleLanguage(btn.dataset.lang));
-        });
-    }
-
-    // PWA Installation
-    let deferredPrompt;
-    let installNotificationCount = 0;
-    const MAX_NOTIFICATIONS_PER_DAY = 2;
-
-    // Check if app is installed - improved detection
-    function isAppInstalled() {
-        // Check if running in standalone mode (app is open)
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                            window.navigator.standalone === true;
-        
-        // If not in standalone, app is NOT currently installed
-        if (!isStandalone) {
-            // Clear the installation flag if it exists
-            if (localStorage.getItem('appInstalled') === 'true') {
-                console.log('App was uninstalled, resetting flags');
-                localStorage.removeItem('appInstalled');
-                localStorage.removeItem('installNotifications');
+            toggleLanguage() {
+                this.currentLang = this.currentLang === 'en' ? 'hi' : 'en';
+                localStorage.setItem('language', this.currentLang);
+                this.applyLanguage();
             }
-            return false;
-        }
-        
-        return true;
-    }
 
-    // Get notification data from localStorage
-    function getNotificationData() {
-        const data = localStorage.getItem('installNotifications');
-        if (!data) return { date: new Date().toDateString(), count: 0, dismissed: [] };
-        
-        const parsed = JSON.parse(data);
-        if (parsed.date !== new Date().toDateString()) {
-            return { date: new Date().toDateString(), count: 0, dismissed: [] };
-        }
-        return parsed;
-    }
-
-    // Save notification data
-    function saveNotificationData(data) {
-        localStorage.setItem('installNotifications', JSON.stringify(data));
-    }
-
-    // Check if we should show notification
-    function shouldShowNotification() {
-        if (isAppInstalled()) return false;
-        
-        const data = getNotificationData();
-        const currentHour = new Date().getHours();
-        const period = currentHour < 16 ? 'morning' : 'evening';
-        
-        if (data.count >= MAX_NOTIFICATIONS_PER_DAY) return false;
-        if (data.dismissed.includes(period)) return false;
-        
-        return true;
-    }
-
-    // Show install prompt notification
-    function showInstallPrompt() {
-        if (!shouldShowNotification()) return;
-        
-        setTimeout(() => {
-            const prompt = document.getElementById('installPrompt');
-            if (prompt && deferredPrompt) {
-                prompt.classList.add('show');
-                
-                const data = getNotificationData();
-                data.count++;
-                saveNotificationData(data);
-            }
-        }, 3000);
-    }
-
-    // PWA Install Event - fires when app is installable
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        console.log('beforeinstallprompt fired - app is not installed');
-        
-        // Clear any old installation flags
-        localStorage.removeItem('appInstalled');
-        
-        // Show install button
-        const installBtn = document.getElementById('installButton');
-        if (installBtn) {
-            installBtn.classList.remove('hidden');
-        }
-        
-        // Show notification prompt
-        showInstallPrompt();
-    });
-
-    // Listen for app installation
-    window.addEventListener('appinstalled', (e) => {
-        console.log('App installed successfully');
-        localStorage.setItem('appInstalled', 'true');
-        
-        // Hide install button
-        const installBtn = document.getElementById('installButton');
-        if (installBtn) {
-            installBtn.classList.add('hidden');
-        }
-        
-        // Hide install prompt
-        const installPrompt = document.getElementById('installPrompt');
-        if (installPrompt) {
-            installPrompt.classList.remove('show');
-        }
-        
-        deferredPrompt = null;
-    });
-
-    // Install button click
-    document.getElementById('installButton')?.addEventListener('click', async () => {
-        if (!deferredPrompt) {
-            console.log('Install prompt not available');
-            return;
-        }
-        
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        
-        console.log('User choice:', outcome);
-        
-        if (outcome === 'accepted') {
-            localStorage.setItem('appInstalled', 'true');
-            document.getElementById('installButton').classList.add('hidden');
-            document.getElementById('installPrompt').classList.remove('show');
-        }
-        
-        deferredPrompt = null;
-    });
-
-    // Prompt install button
-    document.getElementById('promptInstall')?.addEventListener('click', async () => {
-        if (!deferredPrompt) {
-            console.log('Install prompt not available');
-            return;
-        }
-        
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        
-        console.log('User choice:', outcome);
-        
-        if (outcome === 'accepted') {
-            localStorage.setItem('appInstalled', 'true');
-            document.getElementById('installButton').classList.add('hidden');
-        }
-        
-        document.getElementById('installPrompt').classList.remove('show');
-        deferredPrompt = null;
-    });
-
-    // Prompt later button
-    document.getElementById('promptLater')?.addEventListener('click', () => {
-        const data = getNotificationData();
-        const currentHour = new Date().getHours();
-        const period = currentHour < 16 ? 'morning' : 'evening';
-        
-        if (!data.dismissed.includes(period)) {
-            data.dismissed.push(period);
-        }
-        saveNotificationData(data);
-        
-        document.getElementById('installPrompt').classList.remove('show');
-    });
-
-    // Close prompt
-    document.getElementById('closePrompt')?.addEventListener('click', () => {
-        const data = getNotificationData();
-        const currentHour = new Date().getHours();
-        const period = currentHour < 16 ? 'morning' : 'evening';
-        
-        if (!data.dismissed.includes(period)) {
-            data.dismissed.push(period);
-        }
-        saveNotificationData(data);
-        
-        document.getElementById('installPrompt').classList.remove('show');
-    });
-
-    // Check if app was uninstalled - runs every 3 seconds
-    setInterval(() => {
-        const wasInstalled = localStorage.getItem('appInstalled') === 'true';
-        const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
-                                     window.navigator.standalone === true;
-        
-        // If was installed but no longer in standalone mode, user deleted the app
-        if (wasInstalled && !isCurrentlyInstalled) {
-            console.log('App was uninstalled - resetting installation state');
-            
-            // Clear all installation-related data
-            localStorage.removeItem('appInstalled');
-            localStorage.removeItem('installNotifications');
-            
-            // Reload to trigger beforeinstallprompt again
-            location.reload();
-        }
-        
-        // If not installed and install button exists, make sure it's visible if prompt available
-        if (!wasInstalled && !isCurrentlyInstalled && deferredPrompt) {
-            const installBtn = document.getElementById('installButton');
-            if (installBtn && installBtn.classList.contains('hidden')) {
-                installBtn.classList.remove('hidden');
-            }
-        }
-    }, 3000);
-
-    // Detect when page becomes visible (user returns from uninstalling)
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            console.log('Page visible - checking installation status');
-            
-            const wasInstalled = localStorage.getItem('appInstalled') === 'true';
-            const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
-                                         window.navigator.standalone === true;
-            
-            // If was installed but not in standalone mode anymore
-            if (wasInstalled && !isCurrentlyInstalled) {
-                console.log('App uninstalled detected on page focus');
-                localStorage.removeItem('appInstalled');
-                localStorage.removeItem('installNotifications');
-                location.reload();
-            }
-        }
-    });
-
-    // Also check on page load
-    window.addEventListener('load', () => {
-        const wasInstalled = localStorage.getItem('appInstalled') === 'true';
-        const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
-                                     window.navigator.standalone === true;
-        
-        if (wasInstalled && !isCurrentlyInstalled) {
-            console.log('App uninstalled - clearing data on page load');
-            localStorage.removeItem('appInstalled');
-            localStorage.removeItem('installNotifications');
-            
-            // Reset notification data to allow prompts again
-            const data = { date: new Date().toDateString(), count: 0, dismissed: [] };
-            localStorage.setItem('installNotifications', JSON.stringify(data));
-        }
-    });
-
-    // Sidebar Menu
-    const menuIcon = document.getElementById('menuIcon');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    const closeMenu = document.getElementById('closeMenu');
-
-    function toggleSidebar() {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-    }
-
-    menuIcon?.addEventListener('click', toggleSidebar);
-    closeMenu?.addEventListener('click', toggleSidebar);
-    overlay?.addEventListener('click', toggleSidebar);
-
-    // Share functionality
-    document.getElementById('shareApp')?.addEventListener('click', async (e) => {
-        e.preventDefault();
-        
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: 'Indian Railways Question Bank',
-                    text: 'Access comprehensive question papers for Railway exams',
-                    url: window.location.href
-                });
-            } catch (err) {
-                console.log('Share cancelled');
-            }
+           applyLanguage() {
+    const elements = document.querySelectorAll('[data-en][data-hi]');
+    elements.forEach(el => {
+        const text = this.currentLang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-hi');
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = text;
         } else {
-            // Fallback: copy to clipboard
-            navigator.clipboard.writeText(window.location.href);
-            alert('Link copied to clipboard!');
+            el.textContent = text;
         }
     });
+    
+    if (this.langSwitch) {
+        const indicators = this.langSwitch.querySelectorAll('.lang-indicator');
+        if (this.currentLang === 'en') {
+            indicators[0].style.fontWeight = '700';
+            indicators[0].style.color = 'var(--primary-blue)';
+            indicators[1].style.fontWeight = '400';
+            indicators[1].style.color = '#999';
+        } else {
+            indicators[0].style.fontWeight = '400';
+            indicators[0].style.color = '#999';
+            indicators[1].style.fontWeight = '700';
+            indicators[1].style.color = 'var(--primary-blue)';
+        }
+    }
+}
 
-    // Service Worker Registration with aggressive update strategy
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
-            .then(registration => {
-                console.log('SW registered:', registration);
-                
-                // Force immediate update check
-                registration.update();
-                
-                // Check for updates aggressively - every 10 seconds
-                setInterval(() => {
-                    console.log('Forcing update check...');
-                    registration.update();
-                }, 10000);
-                
-                // Listen for updates
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    console.log('New service worker found, installing...');
-                    
-                    newWorker.addEventListener('statechange', () => {
-                        console.log('SW state changed:', newWorker.state);
-                        
-                        if (newWorker.state === 'installed') {
-                            if (navigator.serviceWorker.controller) {
-                                // New version available
-                                console.log('New version available!');
-                                
-                                // Tell the new SW to skip waiting
-                                newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                
-                                // Reload immediately to get fresh content
-                                setTimeout(() => {
-                                    console.log('Reloading to apply updates...');
-                                    window.location.reload();
-                                }, 1000);
-                            } else {
-                                // First install
-                                console.log('Service worker installed for the first time');
-                            }
-                        }
-                        
-                        if (newWorker.state === 'activated') {
-                            console.log('Service worker activated');
-                        }
-                    });
+        }
+
+        // PWA Installation Manager
+        class PWAInstallManager {
+            constructor() {
+                this.deferredPrompt = null;
+                this.installBtn = document.getElementById('installBtn');
+                this.installFromNotif = document.getElementById('installFromNotif');
+                this.laterBtn = document.getElementById('laterBtn');
+                this.notificationPopup = document.getElementById('notificationPopup');
+                this.init();
+            }
+
+            init() {
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    this.deferredPrompt = e;
+                    this.checkInstallStatus();
                 });
-            })
-            .catch(error => {
-                console.error('SW registration failed:', error);
-            });
-        
-        // Reload when new service worker takes control
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (refreshing) return;
-            console.log('Controller changed, reloading page...');
-            refreshing = true;
-            window.location.reload();
-        });
-        
-        // Listen for messages from service worker
-        navigator.serviceWorker.addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'RELOAD_PAGE') {
-                console.log('SW requested page reload');
-                window.location.reload();
-            }
-        });
-    }
 
-    // Force cache refresh on page load
-    window.addEventListener('load', () => {
-        // Clear any stale caches on load
-        if ('caches' in window) {
-            caches.keys().then(cacheNames => {
-                console.log('Found caches:', cacheNames);
-            });
-        }
-    });
+                window.addEventListener('appinstalled', () => {
+                    this.deferredPrompt = null;
+                    this.hideInstallUI();
+                    localStorage.setItem('pwaInstalled', 'true');
+                });
 
-    // Animation on scroll
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.feature-card').forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(card);
-    });
-
-    // IndexedDB for storing bookmarks (persistent user data)
-    const DB_NAME = 'IndianRailwayQB';
-    const DB_VERSION = 1;
-    const STORE_NAME = 'bookmarks';
-
-    function initDB() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME, DB_VERSION);
-            
-            request.onerror = () => reject(request.error);
-            request.onsuccess = () => resolve(request.result);
-            
-            request.onupgradeneeded = (event) => {
-                const db = event.target.result;
-                if (!db.objectStoreNames.contains(STORE_NAME)) {
-                    db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                if (this.installBtn) {
+                    this.installBtn.addEventListener('click', () => this.promptInstall());
                 }
-            };
-        });
-    }
 
-    // Request persistent storage (prevents auto-deletion)
-    if (navigator.storage && navigator.storage.persist) {
-        navigator.storage.persist().then(persistent => {
-            if (persistent) {
-                console.log('Bookmarks storage is persistent');
+                if (this.installFromNotif) {
+                    this.installFromNotif.addEventListener('click', () => {
+                        this.hideNotification();
+                        this.promptInstall();
+                    });
+                }
+
+                if (this.laterBtn) {
+                    this.laterBtn.addEventListener('click', () => this.handleLater());
+                }
+
+                this.checkInstallStatus();
+                this.scheduleNotifications();
+            }
+
+            checkInstallStatus() {
+                const isInstalled = localStorage.getItem('pwaInstalled') === 'true' || 
+                                  window.matchMedia('(display-mode: standalone)').matches ||
+                                  window.navigator.standalone === true;
+
+                if (isInstalled) {
+                    this.hideInstallUI();
+                } else if (this.deferredPrompt) {
+                    this.showInstallUI();
+                }
+            }
+
+            showInstallUI() {
+                if (this.installBtn) {
+                    this.installBtn.style.display = 'flex';
+                }
+            }
+
+            hideInstallUI() {
+                if (this.installBtn) {
+                    this.installBtn.style.display = 'none';
+                }
+                this.hideNotification();
+            }
+
+            async promptInstall() {
+                if (!this.deferredPrompt) return;
+
+                this.deferredPrompt.prompt();
+                const { outcome } = await this.deferredPrompt.userChoice;
+
+                if (outcome === 'accepted') {
+                    localStorage.setItem('pwaInstalled', 'true');
+                }
+
+                this.deferredPrompt = null;
+            }
+
+            scheduleNotifications() {
+                const isInstalled = localStorage.getItem('pwaInstalled') === 'true' || 
+                                  window.matchMedia('(display-mode: standalone)').matches;
+
+                if (isInstalled) return;
+
+                setInterval(() => {
+                    this.checkAndShowNotification();
+                }, 60000); // Check every minute
+
+                setTimeout(() => {
+                    this.checkAndShowNotification();
+                }, 5000); // Initial check after 5 seconds
+            }
+
+            checkAndShowNotification() {
+                const isInstalled = localStorage.getItem('pwaInstalled') === 'true' || 
+                                  window.matchMedia('(display-mode: standalone)').matches;
+
+                if (isInstalled) return;
+
+                const today = new Date().toDateString();
+                const notifData = JSON.parse(localStorage.getItem('notificationData') || '{}');
+
+                if (notifData.date !== today) {
+                    notifData.date = today;
+                    notifData.count = 0;
+                    notifData.sessions = [];
+                }
+
+                const currentHour = new Date().getHours();
+                const isFirstHalf = currentHour < 16;
+                const sessionKey = isFirstHalf ? 'first' : 'second';
+
+                if (notifData.count < 2 && !notifData.sessions.includes(sessionKey)) {
+                    this.showNotification();
+                    notifData.count++;
+                    notifData.sessions.push(sessionKey);
+                    localStorage.setItem('notificationData', JSON.stringify(notifData));
+                }
+            }
+
+            showNotification() {
+                if (this.notificationPopup && !this.deferredPrompt) return;
+                if (this.notificationPopup) {
+                    this.notificationPopup.classList.add('show');
+                }
+            }
+
+            hideNotification() {
+                if (this.notificationPopup) {
+                    this.notificationPopup.classList.remove('show');
+                }
+            }
+
+            handleLater() {
+                this.hideNotification();
+                const notifData = JSON.parse(localStorage.getItem('notificationData') || '{}');
+                const today = new Date().toDateString();
+
+                if (notifData.date === today && notifData.count >= 2) {
+                    return; // Already shown 2 times today
+                }
+            }
+        }
+
+        // Menu Manager
+        class MenuManager {
+            constructor() {
+                this.menuBtn = document.getElementById('menuBtn');
+                this.menuClose = document.getElementById('menuClose');
+                this.sideMenu = document.getElementById('sideMenu');
+                this.menuOverlay = document.getElementById('menuOverlay');
+                this.init();
+            }
+
+            init() {
+                if (this.menuBtn) {
+                    this.menuBtn.addEventListener('click', () => this.openMenu());
+                }
+                if (this.menuClose) {
+                    this.menuClose.addEventListener('click', () => this.closeMenu());
+                }
+                if (this.menuOverlay) {
+                    this.menuOverlay.addEventListener('click', () => this.closeMenu());
+                }
+            }
+
+            openMenu() {
+                if (this.sideMenu) this.sideMenu.classList.add('active');
+                if (this.menuOverlay) this.menuOverlay.classList.add('active');
+            }
+
+            closeMenu() {
+                if (this.sideMenu) this.sideMenu.classList.remove('active');
+                if (this.menuOverlay) this.menuOverlay.classList.remove('active');
+            }
+        }
+
+        // Initialize all managers
+        const langManager = new LanguageManager();
+        const pwaManager = new PWAInstallManager();
+        const menuManager = new MenuManager();
+
+        // Check for updates on page load
+        window.addEventListener('load', () => {
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ action: 'skipWaiting' });
             }
         });
-    }
-</script>
+    </script>
 </body>
 </html>
