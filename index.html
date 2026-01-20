@@ -146,11 +146,6 @@
     position: relative;
 }
 
-.lang-switch:hover {
-    background-color: var(--light-blue);
-    color: var(--white);
-    border-color: var(--light-blue);
-}
 
 .lang-switch::before {
     content: '';
@@ -161,9 +156,6 @@
     transition: all 0.3s ease;
 }
 
-.lang-switch:hover::before {
-    background-color: var(--white);
-}
 
 
         .side-menu {
@@ -541,8 +533,8 @@
 
           
 .railway-logo {
-    width: 30px;
-    height: 30px;
+    width: 15px;
+    height: 15px;
 }
 .site-title {
     font-size: 10px;
@@ -848,19 +840,33 @@
 
                 this.checkInstallStatus();
                 this.scheduleNotifications();
+
+                // Debug logging
+    console.log('PWA Install Manager initialized');
+    console.log('Display mode:', window.matchMedia('(display-mode: standalone)').matches ? 'Standalone' : 'Browser');
+    console.log('Stored install status:', localStorage.getItem('pwaInstalled'));
             }
 
-            checkInstallStatus() {
-                const isInstalled = localStorage.getItem('pwaInstalled') === 'true' || 
-                                  window.matchMedia('(display-mode: standalone)').matches ||
+           checkInstallStatus() {
+    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
                                   window.navigator.standalone === true;
 
-                if (isInstalled) {
-                    this.hideInstallUI();
-                } else if (this.deferredPrompt) {
-                    this.showInstallUI();
-                }
-            }
+    if (isCurrentlyInstalled) {
+        localStorage.setItem('pwaInstalled', 'true');
+        this.hideInstallUI();
+    } else {
+        // User is not in installed mode - clear the flag
+        if (localStorage.getItem('pwaInstalled') === 'true') {
+            localStorage.removeItem('pwaInstalled');
+            localStorage.removeItem('notificationData');
+        }
+        
+        if (this.deferredPrompt) {
+            this.showInstallUI();
+        }
+    }
+}
+
 
             showInstallUI() {
                 if (this.installBtn) {
@@ -888,54 +894,101 @@
                 this.deferredPrompt = null;
             }
 
-            scheduleNotifications() {
-                const isInstalled = localStorage.getItem('pwaInstalled') === 'true' || 
-                                  window.matchMedia('(display-mode: standalone)').matches;
+           scheduleNotifications() {
+    // Check if app is currently running as installed
+    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches || 
+                                  window.navigator.standalone === true;
 
-                if (isInstalled) return;
+    if (isCurrentlyInstalled) {
+        localStorage.setItem('pwaInstalled', 'true');
+        return;
+    }
 
-                setInterval(() => {
-                    this.checkAndShowNotification();
-                }, 60000); // Check every minute
+    // If not installed, clear the installed flag (user might have uninstalled)
+    if (localStorage.getItem('pwaInstalled') === 'true') {
+        localStorage.removeItem('pwaInstalled');
+        localStorage.removeItem('notificationData');
+    }
 
-                setTimeout(() => {
-                    this.checkAndShowNotification();
-                }, 5000); // Initial check after 5 seconds
-            }
+    // Show notification immediately after 3 seconds
+    setTimeout(() => {
+        this.checkAndShowNotification();
+    }, 3000);
+
+    // Then check every 30 minutes
+    setInterval(() => {
+        this.checkAndShowNotification();
+    }, 1800000); // Check every 30 minutes
+}
+
 
             checkAndShowNotification() {
-                const isInstalled = localStorage.getItem('pwaInstalled') === 'true' || 
-                                  window.matchMedia('(display-mode: standalone)').matches;
+    // Check if currently running as installed app
+    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches || 
+                                  window.navigator.standalone === true;
 
-                if (isInstalled) return;
+    if (isCurrentlyInstalled) {
+        localStorage.setItem('pwaInstalled', 'true');
+        this.hideNotification();
+        return;
+    }
 
-                const today = new Date().toDateString();
-                const notifData = JSON.parse(localStorage.getItem('notificationData') || '{}');
+    // Don't show if install prompt is not available
+    if (!this.deferredPrompt) {
+        console.log('Install prompt not available yet');
+        return;
+    }
 
-                if (notifData.date !== today) {
-                    notifData.date = today;
-                    notifData.count = 0;
-                    notifData.sessions = [];
-                }
+    const today = new Date().toDateString();
+    const notifData = JSON.parse(localStorage.getItem('notificationData') || '{}');
 
-                const currentHour = new Date().getHours();
-                const isFirstHalf = currentHour < 16;
-                const sessionKey = isFirstHalf ? 'first' : 'second';
+    // Reset data if it's a new day
+    if (notifData.date !== today) {
+        notifData.date = today;
+        notifData.count = 0;
+        notifData.sessions = [];
+        notifData.laterClicked = false;
+    }
 
-                if (notifData.count < 2 && !notifData.sessions.includes(sessionKey)) {
-                    this.showNotification();
-                    notifData.count++;
-                    notifData.sessions.push(sessionKey);
-                    localStorage.setItem('notificationData', JSON.stringify(notifData));
-                }
-            }
+    // If "Later" was clicked today and we've shown 2 times, don't show again
+    if (notifData.laterClicked && notifData.count >= 2) {
+        return;
+    }
 
-            showNotification() {
-                if (this.notificationPopup && !this.deferredPrompt) return;
-                if (this.notificationPopup) {
-                    this.notificationPopup.classList.add('show');
-                }
-            }
+    const currentHour = new Date().getHours();
+    const isFirstHalf = currentHour < 16;
+    const sessionKey = isFirstHalf ? 'first' : 'second';
+
+    // Show notification if we haven't shown it for this session yet and count < 2
+    if (notifData.count < 2 && !notifData.sessions.includes(sessionKey)) {
+        this.showNotification();
+        notifData.count++;
+        notifData.sessions.push(sessionKey);
+        localStorage.setItem('notificationData', JSON.stringify(notifData));
+    }
+}
+
+
+        showNotification() {
+    // Don't show if no install prompt available
+    if (!this.deferredPrompt) {
+        console.log('Cannot show notification - no install prompt');
+        return;
+    }
+    
+    // Don't show if already installed
+    const isCurrentlyInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+                                  window.navigator.standalone === true;
+    if (isCurrentlyInstalled) {
+        return;
+    }
+    
+    if (this.notificationPopup) {
+        this.notificationPopup.classList.add('show');
+        console.log('Showing install notification');
+    }
+}
+
 
             hideNotification() {
                 if (this.notificationPopup) {
@@ -943,15 +996,23 @@
                 }
             }
 
-            handleLater() {
-                this.hideNotification();
-                const notifData = JSON.parse(localStorage.getItem('notificationData') || '{}');
-                const today = new Date().toDateString();
+           handleLater() {
+    this.hideNotification();
+    const notifData = JSON.parse(localStorage.getItem('notificationData') || '{}');
+    const today = new Date().toDateString();
+    
+    // Mark that "Later" was clicked
+    notifData.laterClicked = true;
+    
+    // If we've already shown 2 times today, don't show again
+    if (notifData.date === today && notifData.count >= 2) {
+        localStorage.setItem('notificationData', JSON.stringify(notifData));
+        return;
+    }
+    
+    localStorage.setItem('notificationData', JSON.stringify(notifData));
+}
 
-                if (notifData.date === today && notifData.count >= 2) {
-                    return; // Already shown 2 times today
-                }
-            }
         }
 
         // Menu Manager
