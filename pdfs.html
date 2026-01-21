@@ -681,12 +681,10 @@ const CACHE_BUSTER = Date.now();
                 this.key = key;
             }
 
-           async fetchSections() {
-    try {
-        const response = await fetch(`${this.url}/rest/v1/sections?order=display_order.asc&_t=${Date.now()}`, {
-            cache: 'no-store',
-
-                 headers: {
+            async fetchSections() {
+                try {
+                    const response = await fetch(`${this.url}/rest/v1/sections?order=display_order.asc`, {
+                        headers: {
                             'apikey': this.key,
                             'Authorization': `Bearer ${this.key}`
                         }
@@ -699,10 +697,9 @@ const CACHE_BUSTER = Date.now();
             }
 
             async fetchDepartments(sectionId) {
-    try {
-        const response = await fetch(`${this.url}/rest/v1/departments?section_id=eq.${sectionId}&order=display_order.asc&_t=${Date.now()}`, {
-            cache: 'no-store',
-   headers: {
+                try {
+                    const response = await fetch(`${this.url}/rest/v1/departments?section_id=eq.${sectionId}&order=display_order.asc`, {
+                        headers: {
                             'apikey': this.key,
                             'Authorization': `Bearer ${this.key}`
                         }
@@ -714,11 +711,10 @@ const CACHE_BUSTER = Date.now();
                 }
             }
 
-           async fetchPosts(departmentId) {
-    try {
-        const response = await fetch(`${this.url}/rest/v1/posts?department_id=eq.${departmentId}&order=display_order.asc&_t=${Date.now()}`, {
-            cache: 'no-store',
-headers: {
+            async fetchPosts(departmentId) {
+                try {
+                    const response = await fetch(`${this.url}/rest/v1/posts?department_id=eq.${departmentId}&order=display_order.asc`, {
+                        headers: {
                             'apikey': this.key,
                             'Authorization': `Bearer ${this.key}`
                         }
@@ -731,10 +727,9 @@ headers: {
             }
 
             async fetchPDFs(postId) {
-    try {
-        const response = await fetch(`${this.url}/rest/v1/pdfs?post_id=eq.${postId}&order=year.desc&_t=${Date.now()}`, {
-            cache: 'no-store',
-   headers: {
+                try {
+                    const response = await fetch(`${this.url}/rest/v1/pdfs?post_id=eq.${postId}&order=year.desc`, {
+                        headers: {
                             'apikey': this.key,
                             'Authorization': `Bearer ${this.key}`
                         }
