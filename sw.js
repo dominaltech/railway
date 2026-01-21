@@ -5,10 +5,6 @@ const GITHUB_BRANCH = 'main'; // or 'master' depending on your default branch
 // Files to cache for offline access
 const STATIC_ASSETS = [
     '/',
-    '/index.html',
-    '/pdfs.html',
-    '/bookmarks.html',
-    '/about.html',
     '/manifest.json',
     '/railway.png',
     '/railway1.png'
