@@ -1,4 +1,4 @@
-const CACHE_NAME = 'railbook-v1-' + Date.now();
+const CACHE_NAME = 'railbook-dynamic-' + Date.now();
 const GITHUB_REPO = 'dominaltech/railway'; // Replace with your GitHub repo
 const GITHUB_BRANCH = 'main'; // or 'master' depending on your default branch
 
@@ -7,6 +7,7 @@ const STATIC_ASSETS = [
     '/',
     '/index.html',
     '/pdfs.html',
+    '/bookmarks.html',
     '/about.html',
     '/manifest.json',
     '/railway.png',
@@ -35,19 +36,21 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME && cacheName.startsWith('railbook-v1-')) {
+                    if (cacheName !== CACHE_NAME && 
+                        (cacheName.startsWith('railbook-v1-') || cacheName.startsWith('railbook-dynamic-'))) {
                         console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
         }).then(() => {
+            console.log('Service Worker activated and taking control');
             return self.clients.claim();
         })
     );
 });
 
-// Fetch event - Network First strategy with cache fallback
+// Fetch event - Network First strategy for HTML, Cache First for assets
 self.addEventListener('fetch', (event) => {
     const { request } = event;
     const url = new URL(request.url);
@@ -63,31 +66,34 @@ self.addEventListener('fetch', (event) => {
     }
 
     event.respondWith(
-        fetchWithCacheFallback(request)
+        fetchWithStrategy(request)
     );
 });
 
-// Network First with Cache Fallback strategy
-async function fetchWithCacheFallback(request) {
+// Smart fetch strategy - Network First for HTML, Cache First for assets
+async function fetchWithStrategy(request) {
     const url = new URL(request.url);
+    const isHTMLPage = url.pathname.endsWith('.html') || 
+                       url.pathname === '/' || 
+                       url.pathname.endsWith('/pdfs') ||
+                       url.pathname.endsWith('/bookmarks') ||
+                       url.pathname.endsWith('/about');
 
-    // For HTML files, always try to fetch fresh content from network first
-    if (url.pathname.endsWith('.html') || url.pathname === '/') {
+    // NETWORK FIRST for HTML pages (always fresh content)
+    if (isHTMLPage) {
         try {
+            console.log('Fetching fresh HTML:', url.pathname);
             const networkResponse = await fetch(request, {
-                cache: 'no-cache',
+                cache: 'no-store',
                 headers: {
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
+                    'Pragma': 'no-cache'
                 }
             });
 
-            if (networkResponse && networkResponse.status === 200) {
-                // Clone the response before caching
+            if (networkResponse && networkResponse.ok) {
+                // Clone and cache the fresh response
                 const responseToCache = networkResponse.clone();
-
-                // Update cache with fresh content
                 caches.open(CACHE_NAME).then((cache) => {
                     cache.put(request, responseToCache);
                 });
@@ -95,32 +101,73 @@ async function fetchWithCacheFallback(request) {
                 return networkResponse;
             }
         } catch (error) {
-            console.log('Network request failed, falling back to cache:', error);
+            console.log('Network failed for HTML, trying cache:', error);
         }
 
-        // If network fails, try cache
+        // Fallback to cache if network fails
         const cachedResponse = await caches.match(request);
         if (cachedResponse) {
+            console.log('Serving cached HTML:', url.pathname);
             return cachedResponse;
         }
 
-        // If both network and cache fail, return offline page
-        return new Response('<h1>Offline</h1><p>Please check your internet connection.</p>', {
-            headers: { 'Content-Type': 'text/html' }
-        });
+        // Last resort: offline message
+        return new Response(
+            `<!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Offline - RailBook</title>
+                <style>
+                    body { 
+                        font-family: Arial, sans-serif; 
+                        text-align: center; 
+                        padding: 50px;
+                        background: linear-gradient(135deg, #003366, #0055aa);
+                        color: white;
+                    }
+                    h1 { font-size: 48px; margin: 20px 0; }
+                    p { font-size: 18px; }
+                    button {
+                        background: white;
+                        color: #003366;
+                        border: none;
+                        padding: 15px 30px;
+                        font-size: 16px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        margin-top: 20px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>🚂 RailBook</h1>
+                <h2>You're Offline</h2>
+                <p>Please check your internet connection and try again.</p>
+                <button onclick="window.location.reload()">Retry</button>
+            </body>
+            </html>`,
+            { 
+                headers: { 'Content-Type': 'text/html; charset=utf-8' },
+                status: 503,
+                statusText: 'Service Unavailable'
+            }
+        );
     }
 
-    // For other assets (images, CSS, JS), try cache first, then network
+    // CACHE FIRST for other assets (CSS, JS, images, fonts)
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
-        // Return cached version and update in background
+        // Return cached version immediately and update in background
         fetchAndUpdateCache(request);
         return cachedResponse;
     }
 
+    // If not in cache, fetch from network
     try {
         const networkResponse = await fetch(request);
-        if (networkResponse && networkResponse.status === 200) {
+        if (networkResponse && networkResponse.ok) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
                 cache.put(request, responseToCache);
@@ -128,29 +175,35 @@ async function fetchWithCacheFallback(request) {
         }
         return networkResponse;
     } catch (error) {
-        console.log('Failed to fetch:', request.url, error);
-        return new Response('Network error', { status: 408 });
+        console.log('Failed to fetch asset:', request.url, error);
+        return new Response('Network error', { 
+            status: 408,
+            statusText: 'Request Timeout'
+        });
     }
 }
 
-// Background fetch and cache update
+// Background fetch and cache update for assets
 async function fetchAndUpdateCache(request) {
     try {
         const networkResponse = await fetch(request, {
             cache: 'no-cache'
         });
-        if (networkResponse && networkResponse.status === 200) {
+        if (networkResponse && networkResponse.ok) {
             const cache = await caches.open(CACHE_NAME);
-            cache.put(request, networkResponse.clone());
+            await cache.put(request, networkResponse.clone());
+            console.log('Background updated cache for:', request.url);
         }
     } catch (error) {
         // Silently fail background updates
+        console.log('Background update failed:', error);
     }
 }
 
-// Message event for manual cache refresh
+// Message event for manual cache refresh and control
 self.addEventListener('message', (event) => {
     if (event.data && event.data.action === 'skipWaiting') {
+        console.log('Skip waiting triggered');
         self.skipWaiting();
     }
 
@@ -159,6 +212,7 @@ self.addEventListener('message', (event) => {
             caches.keys().then((cacheNames) => {
                 return Promise.all(
                     cacheNames.map((cacheName) => {
+                        console.log('Clearing cache:', cacheName);
                         return caches.delete(cacheName);
                     })
                 );
@@ -171,6 +225,7 @@ self.addEventListener('message', (event) => {
     if (event.data && event.data.action === 'fetchFresh') {
         event.waitUntil(
             caches.open(CACHE_NAME).then((cache) => {
+                console.log('Fetching fresh content');
                 return cache.addAll(STATIC_ASSETS);
             })
         );
@@ -230,24 +285,42 @@ self.addEventListener('periodicsync', (event) => {
 // Function to fetch latest content from GitHub
 async function fetchLatestContent() {
     try {
-        const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/index.html`, {
-            cache: 'no-cache'
-        });
+        const pagesToUpdate = [
+            'index.html',
+            'pdfs.html',
+            'bookmarks.html',
+            'about.html'
+        ];
 
-        if (response && response.status === 200) {
-            const cache = await caches.open(CACHE_NAME);
-            cache.put('/index.html', response.clone());
-            cache.put('/', response);
+        const cache = await caches.open(CACHE_NAME);
+        
+        for (const page of pagesToUpdate) {
+            try {
+                const response = await fetch(
+                    `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${page}`,
+                    { cache: 'no-cache' }
+                );
 
-            // Notify all clients about the update
-            const clients = await self.clients.matchAll();
-            clients.forEach(client => {
-                client.postMessage({
-                    type: 'CONTENT_UPDATED',
-                    message: 'New content available'
-                });
-            });
+                if (response && response.ok) {
+                    await cache.put(`/${page}`, response.clone());
+                    if (page === 'index.html') {
+                        await cache.put('/', response);
+                    }
+                    console.log('Updated cache for:', page);
+                }
+            } catch (error) {
+                console.log('Failed to update:', page, error);
+            }
         }
+
+        // Notify all clients about the update
+        const allClients = await self.clients.matchAll();
+        allClients.forEach(client => {
+            client.postMessage({
+                type: 'CONTENT_UPDATED',
+                message: 'New content available'
+            });
+        });
     } catch (error) {
         console.log('Failed to fetch latest content:', error);
     }
@@ -260,4 +333,4 @@ self.addEventListener('sync', (event) => {
     }
 });
 
-console.log('Service Worker loaded successfully');
+console.log('Service Worker loaded successfully with Network First strategy for HTML');
