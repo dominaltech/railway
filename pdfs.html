@@ -557,7 +557,7 @@
     <div class="menu-overlay" id="menuOverlay"></div>
 
     <header class="page-header">
-        <h1>Railway Exam Question Bank</h1>
+        <h1>Railway Exam Question Papers</h1>
         <p>Access previous year question papers organized by category</p>
     </header>
 
@@ -912,65 +912,72 @@
                 contentArea.innerHTML = html;
             }
 
-            renderPDFItem(pdf) {
-                const isBookmarked = bookmarkManager.isBookmarked(pdf.id);
+           renderPDFItem(pdf) {
+    const isBookmarked = bookmarkManager.isBookmarked(pdf.id);
+    const safeTitle = pdf.title || 'Untitled';
+    const safeYear = pdf.year || 'N/A';
+    const safeFileSize = pdf.file_size || '';
+    const safeDownloads = pdf.download_count || 0;
+    const safeDriveLink = pdf.drive_link || '#';
+
                 return `
-                    <div class="pdf-item">
-                        <div class="pdf-header">
-                            <div class="pdf-title">
-                                <h4>${pdf.title}</h4>
-                                <div class="pdf-meta">
-                                    <span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-                                        </svg>
-                                        ${pdf.year}
-                                    </span>
-                                    ${pdf.file_size ? `
-                                        <span>
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
-                                            </svg>
-                                            ${pdf.file_size}
-                                        </span>
-                                    ` : ''}
-                                    <span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                                        </svg>
-                                        ${pdf.download_count || 0} downloads
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pdf-actions">
-                            <button class="btn btn-primary" onclick="downloadPDF('${pdf.id}', '${pdf.drive_link}', '${pdf.title}')">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                                </svg>
-                                Download
-                            </button>
-                            <button class="btn btn-secondary" onclick="viewPDF('${pdf.drive_link}')">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-                                </svg>
-                                View
-                            </button>
-                            <button class="btn btn-bookmark ${isBookmarked ? 'bookmarked' : ''}" onclick="toggleBookmark('${pdf.id}', '${pdf.title}', '${pdf.year}', '${pdf.drive_link}')">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-                                </svg>
-                                ${isBookmarked ? 'Saved' : 'Save'}
-                            </button>
-                            <button class="btn btn-secondary" onclick="sharePDF('${pdf.title}', '${pdf.drive_link}')">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-                                </svg>
-                                Share
-                            </button>
-                        </div>
-                    </div>
-                `;
+    <div class="pdf-item">
+        <div class="pdf-header">
+            <div class="pdf-title">
+                <h4>${safeTitle}</h4>
+                <div class="pdf-meta">
+                    <span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                        ${safeYear}
+                    </span>
+                    ${safeFileSize ? `
+                        <span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            </svg>
+                            ${safeFileSize}
+                        </span>
+                    ` : ''}
+                    <span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        ${safeDownloads} downloads
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="pdf-actions">
+            <button class="btn btn-primary" onclick="downloadPDF('${pdf.id}', '${safeDriveLink}', '${safeTitle.replace(/'/g, "\\'")}')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                Download
+            </button>
+            <button class="btn btn-secondary" onclick="viewPDF('${safeDriveLink}')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+                View
+            </button>
+            <button class="btn btn-bookmark ${isBookmarked ? 'bookmarked' : ''}" onclick="toggleBookmark('${pdf.id}', '${safeTitle.replace(/'/g, "\\'")}', '${safeYear}', '${safeDriveLink}')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                </svg>
+                ${isBookmarked ? 'Saved' : 'Save'}
+            </button>
+            <button class="btn btn-secondary" onclick="sharePDF('${safeTitle.replace(/'/g, "\\'")}', '${safeDriveLink}')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                </svg>
+                Share
+            </button>
+        </div>
+    </div>
+`;
+
             }
 
             getSectionIcon(iconName) {
@@ -1161,6 +1168,135 @@
         window.addEventListener('load', () => {
             navigateToSections();
         });
+
+        // ===== BACK BUTTON NAVIGATION (WORKING VERSION) =====
+
+// Store original navigation functions
+const originalNavigateToSections = navigateToSections;
+const originalNavigateToDepartments = navigateToDepartments;
+const originalNavigateToPosts = navigateToPosts;
+const originalNavigateToPDFs = navigateToPDFs;
+
+// Override navigation functions to push history states
+navigateToSections = async function() {
+    // Only push state if not already on sections
+    if (currentView !== 'sections') {
+        window.history.pushState({ view: 'sections' }, '', window.location.href);
+    }
+    await originalNavigateToSections();
+};
+
+navigateToDepartments = async function(sectionId, sectionName) {
+    window.history.pushState({ 
+        view: 'departments', 
+        sectionId, 
+        sectionName 
+    }, '', window.location.href);
+    await originalNavigateToDepartments(sectionId, sectionName);
+};
+
+navigateToPosts = async function(departmentId, departmentName) {
+    window.history.pushState({ 
+        view: 'posts',
+        sectionId: currentSection?.id,
+        sectionName: currentSection?.name,
+        departmentId, 
+        departmentName 
+    }, '', window.location.href);
+    await originalNavigateToPosts(departmentId, departmentName);
+};
+
+navigateToPDFs = async function(postId, postName) {
+    window.history.pushState({ 
+        view: 'pdfs',
+        sectionId: currentSection?.id,
+        sectionName: currentSection?.name,
+        departmentId: currentDepartment?.id,
+        departmentName: currentDepartment?.name,
+        postId,
+        postName
+    }, '', window.location.href);
+    await originalNavigateToPDFs(postId, postName);
+};
+
+// Handle browser back button
+window.addEventListener('popstate', async function(event) {
+    // If no state, we're at the initial page
+    if (!event.state) {
+        // If already on sections view, redirect to index.html
+        if (currentView === 'sections') {
+            window.location.href = '/index.html'; // or just '/'
+            return;
+        }
+        // Otherwise go back to sections
+        currentView = 'sections';
+        currentSection = null;
+        currentDepartment = null;
+        currentPost = null;
+        await originalNavigateToSections();
+        return;
+    }
+
+    // Handle state-based navigation
+    const state = event.state;
+
+    try {
+        switch(state.view) {
+            case 'sections':
+                currentView = 'sections';
+                currentSection = null;
+                currentDepartment = null;
+                currentPost = null;
+                await originalNavigateToSections();
+                break;
+
+            case 'departments':
+                if (state.sectionId && state.sectionName) {
+                    currentView = 'departments';
+                    currentSection = { id: state.sectionId, name: state.sectionName };
+                    currentDepartment = null;
+                    currentPost = null;
+                    await originalNavigateToDepartments(state.sectionId, state.sectionName);
+                }
+                break;
+
+            case 'posts':
+                if (state.departmentId && state.departmentName && state.sectionId && state.sectionName) {
+                    currentView = 'posts';
+                    currentSection = { id: state.sectionId, name: state.sectionName };
+                    currentDepartment = { id: state.departmentId, name: state.departmentName };
+                    currentPost = null;
+                    await originalNavigateToPosts(state.departmentId, state.departmentName);
+                }
+                break;
+
+            case 'pdfs':
+                if (state.postId && state.postName) {
+                    currentView = 'pdfs';
+                    currentSection = { id: state.sectionId, name: state.sectionName };
+                    currentDepartment = { id: state.departmentId, name: state.departmentName };
+                    currentPost = { id: state.postId, name: state.postName };
+                    await originalNavigateToPDFs(state.postId, state.postName);
+                }
+                break;
+
+            default:
+                // Unknown state, redirect to index.html
+                window.location.href = '/index.html';
+        }
+    } catch (error) {
+        console.error('Navigation error on back button:', error);
+        // On error, redirect to index.html
+        window.location.href = '/index.html';
+    }
+});
+
+// Initialize with sections state when page loads
+window.addEventListener('load', function() {
+    // Replace current state with sections view
+    window.history.replaceState({ view: 'sections' }, '', window.location.href);
+});
+
     </script>
 </body>
 </html>
