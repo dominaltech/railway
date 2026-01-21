@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - RailBook</title>
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#003366">
-    <title>About Us - RailBook</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="railway.png">
     <style>
         * {
             margin: 0;
@@ -14,85 +13,375 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            padding: 20px;
-            padding-bottom: 80px;
+        :root {
+            --primary: #003366;
+            --secondary: #0055aa;
+            --accent: #ff6b35;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
         }
 
-        h1 {
-            color: #003366;
-            text-align: center;
-            margin-bottom: 30px;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            color: white;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 40px 20px;
         }
 
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #ffffff;
-            border-top: 2px solid #e0e0e0;
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 30px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .logo svg {
+            width: 70px;
+            height: 70px;
+            fill: var(--primary);
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .section p {
+            line-height: 1.8;
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            padding: 5px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .card li::before {
+            content: "▸ ";
+            color: var(--accent);
+        }
+
+        .stats {
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+            margin: 30px 0;
         }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #666666;
-            font-size: 12px;
-            flex: 1;
+        .stat {
+            text-align: center;
         }
 
-        .nav-item.active {
-            color: #003366;
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent);
         }
 
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 4px;
-            fill: currentColor;
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .footer p {
+            opacity: 0.8;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>About RailBook</h1>
-        <p style="text-align: center; color: #666;">About Us content will be implemented here.</p>
+    <div class="header">
+        <button class="back-btn" onclick="window.location.href='/index.html'">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Back to Home
+        </button>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <svg viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-            </svg>
-            <span>Home</span>
-        </a>
-        <a href="pdfs.html" class="nav-item">
-            <svg viewBox="0 0 24 24">
-                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-            </svg>
-            <span>PDFs</span>
-        </a>
-        <a href="about.html" class="nav-item active">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            <span>About</span>
-        </a>
-    </nav>
+    <div class="container">
+        <div class="hero">
+            <div class="logo">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 15.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V5c0-3.5-3.58-4-8-4s-8 .5-8 4v10.5zm8 1.5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6-7H6V5h12v5z"/>
+                </svg>
+            </div>
+            <h1>🚂 RailBook</h1>
+            <p class="tagline">Your Ultimate Railway Exam Companion</p>
+            <span class="badge">Made by Railway IT Cell, Solapur Division</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Main Categories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">22</div>
+                <div class="stat-label">Departments</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">40+</div>
+                <div class="stat-label">Job Posts</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                About RailBook
+            </h2>
+            <p>RailBook is a comprehensive digital platform designed to help railway aspirants access previous year question papers for various railway recruitment examinations. Built with ❤️ by the <strong>Railway IT Cell, Solapur Division</strong>, this platform provides organized access to exam materials across all categories.</p>
+            <p>Whether you're preparing for Group D, ALP, NTPC, or Gazetted posts, RailBook has you covered with an extensive collection of question papers organized by department, post, and year.</p>
+        </div>
+
+        <div class="section">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
+                </svg>
+                Exam Categories
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Non-Gazetted Posts</h3>
+                    <ul>
+                        <li>PERSONNEL (Jr. Clerk, Sr. Clerk, S&WI)</li>
+                        <li>C&W (Fitter, Welder, Machinist)</li>
+                        <li>S&T (Signal Maintainer, Technician)</li>
+                        <li>ELECTRICAL (Electrician, Wireman)</li>
+                        <li>LOCO (Helper, Khalasi)</li>
+                        <li>COMMERCIAL (Clerk, Booking Staff)</li>
+                        <li>MEDICAL (Staff Nurse, Pharmacist)</li>
+                        <li>OPERATING (Pointsman, Shunter)</li>
+                        <li>ENGINEERING (Trackman, Mason)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>RRB Exams</h3>
+                    <ul>
+                        <li>Station Master</li>
+                        <li>Assistant Loco Pilot (ALP)</li>
+                        <li>Pointsman</li>
+                        <li>ESM (Electrical Staff Member)</li>
+                        <li>Guard</li>
+                        <li>TC (Ticket Collector)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Gazetted Officers</h3>
+                    <ul>
+                        <li>Assistant Personal Officer (APO)</li>
+                        <li>Assistant Operational Manager (AOM)</li>
+                        <li>Assistant Commercial Manager (ACM)</li>
+                        <li>Assistant Divisional Electrical Engineer (ADEE)</li>
+                        <li>Assistant Divisional Engineer (ADE)</li>
+                        <li>Assistant Divisional Material Manager (ADMM)</li>
+                        <li>Assistant Divisional Mechanical Engineer (ADME)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l-5.5 9h11z M17.5 13c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z M3 21.5h8v-8H3v8z"/>
+                </svg>
+                Features
+            </h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>📚 Extensive Library</h3>
+                    <ul>
+                        <li>1000+ Question Papers</li>
+                        <li>Multiple Years Coverage</li>
+                        <li>All Departments Included</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>📱 Mobile Friendly</h3>
+                    <ul>
+                        <li>Progressive Web App (PWA)</li>
+                        <li>Offline Access</li>
+                        <li>Install on Any Device</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🔖 Smart Organization</h3>
+                    <ul>
+                        <li>Save Your Favorites</li>
+                        <li>Create Custom Folders</li>
+                        <li>Quick Search & Filter</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🚀 Fast & Secure</h3>
+                    <ul>
+                        <li>Lightning Fast Loading</li>
+                        <li>Secure HTTPS</li>
+                        <li>No Ads or Tracking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                Developed By
+            </h2>
+            <p style="text-align: center; font-size: 18px;">
+                <strong>Railway IT Cell</strong><br>
+                Central Railway, Solapur Division<br>
+                Maharashtra, India
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Version 1.0</strong> | January 2026</p>
+            <p>© 2026 Railway IT Cell, Solapur Division. All rights reserved.</p>
+            <p style="font-size: 14px; margin-top: 20px;">
+                Made with ❤️ for Railway Aspirants across India
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-update code
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(reg => reg.update());
+            });
+        }
+    </script>
 </body>
 </html>
