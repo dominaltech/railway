@@ -71,6 +71,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 // Smart fetch strategy - Network First for HTML, Cache First for assets
+// Smart fetch strategy - Network First for HTML, Cache First for assets
 async function fetchWithStrategy(request) {
     const url = new URL(request.url);
     const isHTMLPage = url.pathname.endsWith('.html') || 
@@ -78,36 +79,37 @@ async function fetchWithStrategy(request) {
                        url.pathname.endsWith('/pdfs') ||
                        url.pathname.endsWith('/bookmarks') ||
                        url.pathname.endsWith('/about');
+    
+    // Skip Supabase API calls - never cache them
+    if (url.hostname.includes('supabase.co')) {
+        return fetch(request, { cache: 'no-store' });
+    }
 
-    // NETWORK FIRST for HTML pages (always fresh content)
+    // NETWORK ONLY for HTML pages (bypass cache completely)
     if (isHTMLPage) {
         try {
-            console.log('Fetching fresh HTML:', url.pathname);
+            console.log('Fetching fresh HTML (bypassing cache):', url.pathname);
             const networkResponse = await fetch(request, {
                 cache: 'no-store',
                 headers: {
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache'
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
                 }
             });
 
             if (networkResponse && networkResponse.ok) {
-                // Clone and cache the fresh response
-                const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(request, responseToCache);
-                });
-
+                // DON'T cache HTML - return directly
                 return networkResponse;
             }
         } catch (error) {
-            console.log('Network failed for HTML, trying cache:', error);
+            console.log('Network failed for HTML:', error);
         }
 
-        // Fallback to cache if network fails
+        // Only use cache if completely offline
         const cachedResponse = await caches.match(request);
         if (cachedResponse) {
-            console.log('Serving cached HTML:', url.pathname);
+            console.log('OFFLINE: Serving cached HTML:', url.pathname);
             return cachedResponse;
         }
 
@@ -159,8 +161,6 @@ async function fetchWithStrategy(request) {
     // CACHE FIRST for other assets (CSS, JS, images, fonts)
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
-        // Return cached version immediately and update in background
-        fetchAndUpdateCache(request);
         return cachedResponse;
     }
 
@@ -182,7 +182,6 @@ async function fetchWithStrategy(request) {
         });
     }
 }
-
 // Background fetch and cache update for assets
 async function fetchAndUpdateCache(request) {
     try {
