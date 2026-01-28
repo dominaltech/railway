@@ -507,6 +507,72 @@
             background-color: var(--border-gray);
         }
 
+        /* Welcome Popup Styles */
+        .welcome-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .welcome-popup.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .welcome-content {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .welcome-popup.show .welcome-content {
+            transform: scale(1);
+        }
+
+        .welcome-content h2 {
+            color: var(--primary-blue);
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .welcome-content p {
+            color: var(--gray);
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .welcome-close-btn {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .welcome-close-btn:hover {
+            background-color: var(--light-blue);
+        }
+
         @media screen and (max-width: 400px) {
 
 
@@ -591,6 +657,19 @@
 
             .hero-slider {
                 height: 200px;
+            }
+
+            .welcome-content {
+                padding: 30px 20px;
+                max-width: 90%;
+            }
+
+            .welcome-content h2 {
+                font-size: 20px;
+            }
+
+            .welcome-content p {
+                font-size: 14px;
             }
         }
 
@@ -788,6 +867,15 @@
         </div>
     </div>
 
+    <!-- Welcome Popup -->
+    <div id="welcomePopup" class="welcome-popup">
+        <div class="welcome-content">
+            <h2 data-en="Welcome to RailBook!" data-hi="रेलबुक में आपका स्वागत है!">Welcome to RailBook!</h2>
+            <p data-en="Your journey to railway success starts here. Explore question papers and resources to prepare effectively." data-hi="रेलवे सफलता की आपकी यात्रा यहीं शुरू होती है। प्रभावी तैयारी के लिए प्रश्न पत्र और संसाधनों का अन्वेषण करें।">Your journey to railway success starts here. Explore question papers and resources to prepare effectively.</p>
+            <button id="closeWelcome" class="welcome-close-btn" data-en="Got it!" data-hi="समझ गया!">Got it!</button>
+        </div>
+    </div>
+
     <script>
         // Hero slider functionality (auto-advances every 3 seconds)
         let currentSlide = 0;
@@ -866,6 +954,47 @@
     }
 }
 
+        }
+
+        // Welcome Popup Manager
+        class WelcomePopupManager {
+            constructor() {
+                this.popup = document.getElementById('welcomePopup');
+                this.closeBtn = document.getElementById('closeWelcome');
+                this.init();
+            }
+
+            init() {
+                if (localStorage.getItem('hasVisited') === 'true') {
+                    return; // Not first visit
+                }
+
+                // Show popup after a short delay to ensure DOM and language are ready
+                setTimeout(() => {
+                    this.showPopup();
+                }, 500);
+
+                if (this.closeBtn) {
+                    this.closeBtn.addEventListener('click', () => this.hidePopup());
+                }
+            }
+
+            showPopup() {
+                if (this.popup) {
+                    this.popup.classList.add('show');
+                    // Auto-hide after 4 seconds
+                    setTimeout(() => {
+                        this.hidePopup();
+                    }, 4000);
+                }
+            }
+
+            hidePopup() {
+                if (this.popup) {
+                    this.popup.classList.remove('show');
+                }
+                localStorage.setItem('hasVisited', 'true');
+            }
         }
 
         // PWA Installation Manager
@@ -1119,6 +1248,7 @@
 
         // Initialize all managers
         const langManager = new LanguageManager();
+        const welcomeManager = new WelcomePopupManager(); // Initialize after langManager for bilingual support
         const pwaManager = new PWAInstallManager();
         const menuManager = new MenuManager();
 
