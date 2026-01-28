@@ -226,7 +226,45 @@
             color: var(--white);
             padding: 40px 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
+
+  .hero-slider {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+@media (min-width: 1024px) {
+    .hero-slider {
+        height: 450px;
+    }
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
         .welcome-section h1 {
             font-size: 28px;
@@ -549,6 +587,10 @@
                 left: 10px;
                 max-width: none;
             }
+
+            .hero-slider {
+                height: 200px;
+            }
         }
 
 
@@ -615,6 +657,17 @@
     <div class="menu-overlay" id="menuOverlay"></div>
 
     <section class="welcome-section">
+        <div class="hero-slider">
+            <div class="slide active">
+                <img src="train1.png" alt="RRB NTPC Exam Pattern and Syllabus">
+            </div>
+            <div class="slide">
+                <img src="train2.png" alt="RRB Group D Previous Year Question Papers">
+            </div>
+            <div class="slide">
+                <img src="train3.png" alt="Indian Railway Exam Study Materials">
+            </div>
+        </div>
         <h1 data-en="Welcome to RailBook" data-hi="भारतीय रेलवे में आपका स्वागत है">Welcome to Indian Railways</h1>
         <p data-en="You can access Question Papers for various Railway Exams here. RailBook is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations." data-hi="आप यहां विभिन्न रेलवे परीक्षाओं के प्रश्न पत्र प्राप्त कर सकते हैं। रेलबुक रेलवे परीक्षा की तैयारी के लिए आपका व्यापक डिजिटल प्लेटफ़ॉर्म है, जो पिछले वर्षों के प्रश्न पत्र, अध्ययन सामग्री और संसाधन तक त्वरित पहुंच प्रदान करता है। आरआरबी, आरपीएफ और अन्य रेलवे भर्ती परीक्षाओं के लिए कुशलतापूर्वक तैयारी करें।">You can access Question Papers for various Railway Exams here. RailBook is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations.</p>
     </section>
@@ -735,6 +788,20 @@
     </div>
 
     <script>
+        // Hero slider functionality (auto-advances every 3 seconds)
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        setInterval(nextSlide, 3000);
+        // Ensure first slide is active on load
+        if (slides.length > 0) {
+            slides[0].classList.add('active');
+        }
+
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
