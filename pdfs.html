@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#003366">
-    <title>Question Papers - RailBook</title>
+    <title>Question Papers - RailExam</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="railway.png">
     <style>
@@ -741,7 +741,7 @@
             });
         }
 
-      switchTab(page) {
+    switchTab(page) {
     currentTab = page;
     
     // Update active tab UI
@@ -753,10 +753,8 @@
     // Navigate based on tab
     switch(page) {
         case 'question-papers':
-            // Only navigate if not already in question papers flow
-            if (!currentView.includes('sections') && !currentView.includes('departments') && currentView !== 'posts' && (currentView !== 'pdfs' || currentTab !== 'question-papers')) {
-                navigateToSections();
-            }
+            // Always navigate to sections when switching to Question Papers
+            navigateToSections();
             break;
         case 'syllabus':
             navigateToSyllabus();
@@ -766,9 +764,7 @@
             break;
     }
 }
-
     }
-
     // ===== MENU MANAGEMENT =====
     class MenuManager {
         constructor() {
@@ -1747,7 +1743,7 @@ async function loadSyllabusByDepartment(departmentId, departmentName) {
 
     async function sharePDF(title, driveLink) {
         const shareData = {
-            title: `${title} - RailBook`,
+            title: `${title} - RailExam`,
             text: `Check out this Railway exam question paper: ${title}`,
             url: driveLink
         };
