@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#003366">
-    <meta name="description" content="RailBook - Indian Railway Question Papers and Exam Resources">
-    <title>RailBook - Indian Railway Question Bank</title>
+    <meta name="description" content="RailExam - Indian Railway Question Papers and Exam Resources">
+    <title>RailExam - Indian Railway Question Bank</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="railway.png">
     <style>
@@ -548,6 +548,7 @@
             font-size: 24px;
             margin-bottom: 15px;
             font-weight: 700;
+            margin-top: 10px;
         }
 
         .welcome-content p {
@@ -666,6 +667,7 @@
 
             .welcome-content h2 {
                 font-size: 20px;
+                margin-top: 10px;
             }
 
             .welcome-content p {
@@ -685,7 +687,158 @@
     font-weight: 700;
 }
 
-       
+
+/* Language Toggle Button */
+.lang-toggle-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #ff9933, #138808);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.lang-toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.lang-icon {
+    font-size: 16px;
+}
+
+/* Welcome Image Styling */
+.welcome-image {
+    margin: 20px 0;
+    text-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.welcome-image img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    .lang-toggle-btn {
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .welcome-image {
+        margin: 15px 0;
+    }
+}
+
+  
+
+/* Language Switch Button */
+.lang-switch {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #ff9933, #ffffff, #138808);
+    color: #003366;
+    border: 2px solid #003366;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.lang-switch:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.lang-indicator {
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.lang-text {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Highlight active language */
+.lang-switch[data-lang="en"] .lang-indicator:first-child {
+    color: #003366;
+    text-decoration: underline;
+}
+
+.lang-switch[data-lang="hi"] .lang-indicator:last-child {
+    color: #003366;
+    text-decoration: underline;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    .lang-switch {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .lang-indicator {
+        font-size: 11px;
+    }
+    
+    .lang-text {
+        font-size: 14px;
+    }
+}
+
+/* Close X Button */
+.popup-close-x {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    border-radius: 50%;
+}
+
+.popup-close-x:hover {
+    background: #f0f0f0;
+    color: #333;
+    transform: rotate(90deg);
+}
+
+
     </style>
 </head>
 <body>
@@ -719,7 +872,7 @@
 
        <div class="header-center">
     <img src="railway2.png" alt="Indian Railway Logo" class="railway-logo">
-    <h2 class="site-title" data-en="RailBook - Railway Exam Question Banks" data-hi="रेलबुक - रेलवे परीक्षा प्रश्न बैंक">RailBook - Railway Exam Question Banks</h2>
+    <h2 class="site-title" data-en="RailExam - Railway Exam Question Banks" data-hi="रेलबुक - रेलवे परीक्षा प्रश्न बैंक">RailExam - Railway Exam Question Banks</h2>
 </div>
     </div>
 
@@ -748,8 +901,8 @@
                 <img src="train3.png" alt="Indian Railway Exam Study Materials">
             </div>
         </div>
-        <h1 data-en="Welcome to RailBook" data-hi="भारतीय रेलवे में आपका स्वागत है">Welcome to Indian Railways</h1>
-        <p data-en="You can access Question Papers for various Railway Exams here. RailBook is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations." data-hi="आप यहां विभिन्न रेलवे परीक्षाओं के प्रश्न पत्र प्राप्त कर सकते हैं। रेलबुक रेलवे परीक्षा की तैयारी के लिए आपका व्यापक डिजिटल प्लेटफ़ॉर्म है, जो पिछले वर्षों के प्रश्न पत्र, अध्ययन सामग्री और संसाधन तक त्वरित पहुंच प्रदान करता है। आरआरबी, आरपीएफ और अन्य रेलवे भर्ती परीक्षाओं के लिए कुशलतापूर्वक तैयारी करें।">You can access Question Papers for various Railway Exams here. RailBook is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations.</p>
+        <h1 data-en="Welcome to RailExam" data-hi="भारतीय रेलवे में आपका स्वागत है">Welcome to Indian Railways</h1>
+        <p data-en="You can access Question Papers for various Railway Exams here. RailExam is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations." data-hi="आप यहां विभिन्न रेलवे परीक्षाओं के प्रश्न पत्र प्राप्त कर सकते हैं। रेलबुक रेलवे परीक्षा की तैयारी के लिए आपका व्यापक डिजिटल प्लेटफ़ॉर्म है, जो पिछले वर्षों के प्रश्न पत्र, अध्ययन सामग्री और संसाधन तक त्वरित पहुंच प्रदान करता है। आरआरबी, आरपीएफ और अन्य रेलवे भर्ती परीक्षाओं के लिए कुशलतापूर्वक तैयारी करें।">You can access Question Papers for various Railway Exams here. RailExam is your comprehensive digital platform for Railway exam preparation, providing instant access to previous year question papers, study materials, and resources. Prepare efficiently for RRB, RPF, and other Railway recruitment examinations.</p>
     </section>
 
     <main class="main-content">
@@ -764,9 +917,9 @@
 
         <div class="info-section">
             <div class="info-card">
-                <h2 data-en="About RailBook" data-hi="रेलबुक के बारे में">About RailBook</h2>
-                <p data-en="RailBook is an official initiative by Indian Railways to provide aspirants with a centralized platform for accessing Railway examination resources. This platform offers previous year question papers, practice tests, and study materials for various Railway recruitment examinations including RRB NTPC, RRB Group D, RPF Constable, and other technical and non-technical posts." data-hi="रेलबुक भारतीय रेलवे द्वारा रेलवे परीक्षा संसाधनों तक पहुँचने के लिए आकांक्षियों को एक केंद्रीकृत मंच प्रदान करने की एक आधिकारिक पहल है। यह प्लेटफ़ॉर्म आरआरबी एनटीपीसी, आरआरबी ग्रुप डी, आरपीएफ कांस्टेबल और अन्य तकनीकी और गैर-तकनीकी पदों सहित विभिन्न रेलवे भर्ती परीक्षाओं के लिए पिछले वर्षों के प्रश्न पत्र, अभ्यास परीक्षण और अध्ययन सामग्री प्रदान करता है।">RailBook is an official initiative by Indian Railways to provide aspirants with a centralized platform for accessing Railway examination resources. This platform offers previous year question papers, practice tests, and study materials for various Railway recruitment examinations including RRB NTPC, RRB Group D, RPF Constable, and other technical and non-technical posts.</p>
-                <p data-en="What makes RailBook unique is its ability to transform into a Progressive Web Application (PWA). This means you can install RailBook as an application on your mobile phone, tablet, or desktop computer. Once installed, you can access all resources offline, receive notifications about new content, and enjoy a seamless app-like experience across all your devices." data-hi="रेलबुक को अद्वितीय बनाता है इसकी प्रोग्रेसिव वेब एप्लिकेशन (पीडब्ल्यूए) में बदलने की क्षमता। इसका मतलब है कि आप अपने मोबाइल फोन, टैबलेट या डेस्कटॉप कंप्यूटर पर रेलबुक को एक एप्लिकेशन के रूप में इंस्टॉल कर सकते हैं। एक बार इंस्टॉल होने के बाद, आप सभी संसाधनों को ऑफलाइन एक्सेस कर सकते हैं, नई सामग्री के बारे में सूचनाएं प्राप्त कर सकते हैं, और अपने सभी उपकरणों पर एक सहज ऐप जैसा अनुभव का आनंद ले सकते हैं।">What makes RailBook unique is its ability to transform into a Progressive Web Application (PWA). This means you can install RailBook as an application on your mobile phone, tablet, or desktop computer. Once installed, you can access all resources offline, receive notifications about new content, and enjoy a seamless app-like experience across all your devices.</p>
+                <h2 data-en="About RailExam" data-hi="रेलबुक के बारे में">About RailExam</h2>
+                <p data-en="RailExam is an official initiative by Indian Railways to provide aspirants with a centralized platform for accessing Railway examination resources. This platform offers previous year question papers, practice tests, and study materials for various Railway recruitment examinations including RRB NTPC, RRB Group D, RPF Constable, and other technical and non-technical posts." data-hi="रेलबुक भारतीय रेलवे द्वारा रेलवे परीक्षा संसाधनों तक पहुँचने के लिए आकांक्षियों को एक केंद्रीकृत मंच प्रदान करने की एक आधिकारिक पहल है। यह प्लेटफ़ॉर्म आरआरबी एनटीपीसी, आरआरबी ग्रुप डी, आरपीएफ कांस्टेबल और अन्य तकनीकी और गैर-तकनीकी पदों सहित विभिन्न रेलवे भर्ती परीक्षाओं के लिए पिछले वर्षों के प्रश्न पत्र, अभ्यास परीक्षण और अध्ययन सामग्री प्रदान करता है।">RailExam is an official initiative by Indian Railways to provide aspirants with a centralized platform for accessing Railway examination resources. This platform offers previous year question papers, practice tests, and study materials for various Railway recruitment examinations including RRB NTPC, RRB Group D, RPF Constable, and other technical and non-technical posts.</p>
+                <p data-en="What makes RailExam unique is its ability to transform into a Progressive Web Application (PWA). This means you can install RailExam as an application on your mobile phone, tablet, or desktop computer. Once installed, you can access all resources offline, receive notifications about new content, and enjoy a seamless app-like experience across all your devices." data-hi="रेलबुक को अद्वितीय बनाता है इसकी प्रोग्रेसिव वेब एप्लिकेशन (पीडब्ल्यूए) में बदलने की क्षमता। इसका मतलब है कि आप अपने मोबाइल फोन, टैबलेट या डेस्कटॉप कंप्यूटर पर रेलबुक को एक एप्लिकेशन के रूप में इंस्टॉल कर सकते हैं। एक बार इंस्टॉल होने के बाद, आप सभी संसाधनों को ऑफलाइन एक्सेस कर सकते हैं, नई सामग्री के बारे में सूचनाएं प्राप्त कर सकते हैं, और अपने सभी उपकरणों पर एक सहज ऐप जैसा अनुभव का आनंद ले सकते हैं।">What makes RailExam unique is its ability to transform into a Progressive Web Application (PWA). This means you can install RailExam as an application on your mobile phone, tablet, or desktop computer. Once installed, you can access all resources offline, receive notifications about new content, and enjoy a seamless app-like experience across all your devices.</p>
             </div>
 
             <div class="features-grid">
@@ -852,10 +1005,10 @@
             <svg viewBox="0 0 24 24">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
             </svg>
-            <h3 data-en="Install RailBook" data-hi="रेलबुक इंस्टॉल करें">Install RailBook</h3>
+            <h3 data-en="Install RailExam" data-hi="रेलबुक इंस्टॉल करें">Install RailExam</h3>
         </div>
         <div class="notification-body">
-            <p data-en="Install RailBook app for quick access to Railway exam resources and offline support!" data-hi="रेलवे परीक्षा संसाधनों और ऑफलाइन समर्थन तक त्वरित पहुंच के लिए रेलबुक ऐप इंस्टॉल करें!">Install RailBook app for quick access to Railway exam resources and offline support!</p>
+            <p data-en="Install RailExam app for quick access to Railway exam resources and offline support!" data-hi="रेलवे परीक्षा संसाधनों और ऑफलाइन समर्थन तक त्वरित पहुंच के लिए रेलबुक ऐप इंस्टॉल करें!">Install RailExam app for quick access to Railway exam resources and offline support!</p>
         </div>
         <div class="notification-actions">
             <button class="notification-btn btn-install-notif" id="installFromNotif">
@@ -869,12 +1022,30 @@
 
     <!-- Welcome Popup -->
     <div id="welcomePopup" class="welcome-popup">
-        <div class="welcome-content">
-            <h2 data-en="Welcome to RailBook!" data-hi="रेलबुक में आपका स्वागत है!">Welcome to RailBook!</h2>
-            <p data-en="Your journey to railway success starts here. Explore question papers and resources to prepare effectively." data-hi="रेलवे सफलता की आपकी यात्रा यहीं शुरू होती है। प्रभावी तैयारी के लिए प्रश्न पत्र और संसाधनों का अन्वेषण करें।">Your journey to railway success starts here. Explore question papers and resources to prepare effectively.</p>
-            <button id="closeWelcome" class="welcome-close-btn" data-en="Got it!" data-hi="समझ गया!">Got it!</button>
+    <div class="welcome-content">
+
+         <button class="popup-close-x" id="popupCloseX">&times;</button>
+        <!-- Language Toggle Button -->
+        <button class="lang-switch" id="langToggle">
+            <span class="lang-indicator">EN</span>
+            <span class="lang-text">⇄</span>
+            <span class="lang-indicator">हिन्दी</span>
+        </button>
+        
+        <h2 data-en="Welcome to RailExam!" data-hi="रेलएग्जाम में आपका स्वागत है!">Welcome to RailExam!</h2>
+        <p data-en="Your journey to railway success starts here. Explore question papers, syllabus, and notifications to prepare effectively." data-hi="रेलवे सफलता की आपकी यात्रा यहीं शुरू होती है। प्रभावी तैयारी के लिए प्रश्न पत्र, पाठ्यक्रम और सूचनाओं का अन्वेषण करें।">Your journey to railway success starts here. Explore question papers, syllabus, and notifications to prepare effectively.</p>
+        
+        <!-- Welcome Image -->
+        <div class="welcome-image">
+            <img src="popup.jpeg" alt="Railway Exam Preparation" />
         </div>
+        
+        <button id="closeWelcome" class="welcome-close-btn" data-en="Got it!" data-hi="समझ गया!">Got it!</button>
     </div>
+</div>
+
+</div>
+
 
     <script>
         // Hero slider functionality (auto-advances every 3 seconds)
@@ -956,46 +1127,99 @@
 
         }
 
-        // Welcome Popup Manager
-        class WelcomePopupManager {
-            constructor() {
-                this.popup = document.getElementById('welcomePopup');
-                this.closeBtn = document.getElementById('closeWelcome');
-                this.init();
-            }
+       // Welcome Popup Manager
+class WelcomePopupManager {
+    constructor() {
+        this.popup = document.getElementById('welcomePopup');
+        this.closeBtn = document.getElementById('closeWelcome');
+        this.langToggle = document.getElementById('langToggle');
+        this.currentLanguage = 'en';
+        this.init();
+    }
 
-            init() {
-                if (localStorage.getItem('hasVisited') === 'true') {
-                    return; // Not first visit
-                }
+    init() {
+    // Check if user has visited before
+    if (localStorage.getItem('hasVisited') === 'true') {
+        return;
+    }
 
-                // Show popup after a short delay to ensure DOM and language are ready
-                setTimeout(() => {
-                    this.showPopup();
-                }, 500);
+    // Load saved language preference
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang) {
+        this.currentLanguage = savedLang;
+    }
 
-                if (this.closeBtn) {
-                    this.closeBtn.addEventListener('click', () => this.hidePopup());
-                }
-            }
+    setTimeout(() => {
+        this.showPopup();
+    }, 500);
 
-            showPopup() {
-                if (this.popup) {
-                    this.popup.classList.add('show');
-                    // Auto-hide after 4 seconds
-                    setTimeout(() => {
-                        this.hidePopup();
-                    }, 4000);
-                }
-            }
+    // Close button event
+    if (this.closeBtn) {
+        this.closeBtn.addEventListener('click', () => this.hidePopup());
+    }
 
-            hidePopup() {
-                if (this.popup) {
-                    this.popup.classList.remove('show');
-                }
-                localStorage.setItem('hasVisited', 'true');
-            }
+    // ADD THIS - Close X button event
+    const closeX = document.getElementById('popupCloseX');
+    if (closeX) {
+        closeX.addEventListener('click', () => this.hidePopup());
+    }
+
+    // Language toggle event
+    if (this.langToggle) {
+        this.langToggle.addEventListener('click', () => this.toggleLanguage());
+    }
+}
+
+
+    showPopup() {
+        if (this.popup) {
+            // Apply saved language before showing
+            this.applyLanguage(this.currentLanguage);
+            this.popup.classList.add('show');
+            // NO AUTO-HIDE - user must click close button
         }
+    }
+
+    hidePopup() {
+        if (this.popup) {
+            this.popup.classList.remove('show');
+        }
+        localStorage.setItem('hasVisited', 'true');
+    }
+
+    toggleLanguage() {
+        // Toggle between English and Hindi
+        this.currentLanguage = this.currentLanguage === 'en' ? 'hi' : 'en';
+        
+        // Apply language to popup elements
+        this.applyLanguage(this.currentLanguage);
+        
+        // Save preference
+        localStorage.setItem('preferredLanguage', this.currentLanguage);
+    }
+
+    applyLanguage(lang) {
+        // Update all elements with data-en and data-hi attributes
+        const popup = this.popup;
+        if (!popup) return;
+
+        popup.querySelectorAll('[data-en][data-hi]').forEach(element => {
+            if (lang === 'hi') {
+                element.textContent = element.getAttribute('data-hi');
+            } else {
+                element.textContent = element.getAttribute('data-en');
+            }
+        });
+
+        // Update language switch button attribute for CSS styling
+        if (this.langToggle) {
+            this.langToggle.setAttribute('data-lang', lang);
+        }
+    }
+}
+
+// Initialize Welcome Popup
+const welcomePopup = new WelcomePopupManager();
 
         // PWA Installation Manager
         class PWAInstallManager {
